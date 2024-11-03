@@ -123,3 +123,20 @@ a{
     flex-direction: column;
     width: 100%;
 }
+.button_att{
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+}
+.btn_att{
+    border: none;
+    border-radius: 30px;
+    background-color: rgb(36, 36, 36);
+    width: 40%;
+    height: 5vh;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    font-family:"Raleway";
+    font-size: 15px;
+    color: aliceblue;
+}

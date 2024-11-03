@@ -11,7 +11,6 @@
     ></script>
     <script src="../js/sessao.js"></script>
     <script src="../js/alerta.js"></script>
-
   </head>
   <body onload="validarSessao()">
     <div class="container_all">
@@ -20,10 +19,19 @@
           <div class="div_well_come">
             <h2>Bem vindo, <span id="b_usuario"></span></h2>
           </div>
-
           <ul>
-            <li><button>Atualizar cadastro</button></li>
-            <li><button>Dashboard</button></li>
+            <li></li>
+            <li>
+              <a href="pergunta.html"><button>Pergunta</button></a>
+            </li>
+            <li>
+              <a href="atualizarCadastro.html"
+                ><button>Atualizar cadastro</button></a
+              >
+            </li>
+            <li>
+              <a href="dashboard.html"><button>Dashboard</button></a>
+            </li>
           </ul>
         </div>
         <button class="btn_sair" onclick="limparSessao()">Sair</button>
@@ -51,3 +59,4 @@
     </div>
   </body>
 </html>
+<script></script>

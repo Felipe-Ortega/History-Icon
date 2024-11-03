@@ -55,13 +55,13 @@
     var senhaVar = ipt_senha.value;
 
     if (emailVar == "" || senhaVar == "") {
-    //   cardErro.style.display = "block";
+      //   cardErro.style.display = "block";
       mensagem_erro.innerHTML =
         "(Mensagem de erro para todos os campos em branco)";
       finalizarAguardar();
       return false;
     } else {
-    //   setInterval(sumirMensagem, 5000);
+      //   setInterval(sumirMensagem, 5000);
     }
 
     console.log("FORM LOGIN: ", emailVar);
@@ -82,14 +82,33 @@
 
         if (resposta.ok) {
           console.log(resposta);
-
           resposta.json().then((json) => {
             console.log(json);
             console.log(JSON.stringify(json));
             sessionStorage.EMAIL_USUARIO = json.email;
             sessionStorage.NOME_USUARIO = json.nome;
-            sessionStorage.ID_USUARIO = json.idUsuario;
+            sessionStorage.ID_USUARIO = json.id;
+            sessionStorage.SENHA_USUARIO = json.senha;
 
+            fetch("/usuarios/cadastrarLog", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                idServer: json.id,
+              }),
+            })
+              .then(function (resposta) {
+                if (resposta.ok) {
+                  console.log("resposta: ", resposta);
+                } else {
+                  throw "Houve um erro ao tentar realizar o cadastro de log!";
+                }
+              })
+              .catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`);
+              });
             window.location = "./dashboard/pergunta.html";
           });
         } else {
@@ -108,7 +127,7 @@
     return false;
   }
 
-//   function sumirMensagem() {
-//     cardErro.style.display = "none";
-//   }
+  //   function sumirMensagem() {
+  //     cardErro.style.display = "none";
+  //   }
 </script>

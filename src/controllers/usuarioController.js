@@ -14,17 +14,17 @@ function autenticar(req, res) {
       .then(function (resultadoAutenticar) {
         console.log(`\nResultados encontrados: ${resultadoAutenticar.length}`);
         console.log(`Resultados: ${JSON.stringify(resultadoAutenticar)}`); // transforma JSON em String
-
         if (resultadoAutenticar.length == 1) {
           console.log(resultadoAutenticar);
-            res.json({
-              id: resultadoAutenticar[0].idUsuario,
-              email: resultadoAutenticar[0].email,
-              nome: resultadoAutenticar[0].nome,
-              senha: resultadoAutenticar[0].senha,
-            });
+          res.json({
+            id: resultadoAutenticar[0].idUsuario,
+            email: resultadoAutenticar[0].email,
+            nome: resultadoAutenticar[0].nome,
+            senha: resultadoAutenticar[0].senha,
+          });
         } else if (resultadoAutenticar.length == 0) {
           res.status(403).send("Email e/ou senha inválido(s)");
+          alert("Email e/ou senha inválido(s)")
         } else {
           res.status(403).send("Mais de um usuário com o mesmo login e senha!");
         }
@@ -71,7 +71,62 @@ function cadastrar(req, res) {
   }
 }
 
+function excluir(req, res) {
+  var id = req.body.idServer;
+  usuarioModel
+    .excluir(id)
+    .then(function (resultado) {
+      res.json(resultado);
+    })
+    .catch(function (erro) {
+      console.log(erro);
+      console.log(
+        "\nHouve um erro ao excluir o cadastro! Erro: ",
+        erro.sqlMessage
+      );
+      res.status(500).json(erro.sqlMessage);
+    });
+}
+function cadastrarLog(req, res) {
+  var fkUsuario = req.body.idServer;
+  usuarioModel
+    .cadastrarLog(fkUsuario)
+    .then(function (resultado) {
+      res.json(resultado);
+    })
+    .catch(function (erro) {
+      console.log(erro);
+      console.log(
+        "\nHouve um erro ao realizar o cadastro! Erro: ",
+        erro.sqlMessage
+      );
+      res.status(500).json(erro.sqlMessage);
+    });
+}
+function atualizar(req, res) {
+  var nome = req.body.nomeServer;
+  var email = req.body.emailServer;
+  var senha = req.body.senhaServer;
+  var id = req.body.idServer;
+
+  usuarioModel
+    .atualizar(nome, email, senha, id)
+    .then(function (resultado) {
+      res.json(resultado);
+    })
+    .catch(function (erro) {
+      console.log(erro);
+      console.log(
+        "\nHouve um erro ao realizar o cadastro! Erro: ",
+        erro.sqlMessage
+      );
+      res.status(500).json(erro.sqlMessage);
+    });
+}
 module.exports = {
   autenticar,
   cadastrar,
+  atualizar,
+  cadastrarLog,
+  excluir,
 };

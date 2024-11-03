@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="../css/style_pergunta.css" />
+    <link rel="stylesheet" href="../css/style_login.css" />
+
+    <script
+      src="https://kit.fontawesome.com/39f3be7d68.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="../js/sessao.js"></script>
+    <script src="../js/alerta.js"></script>
+  </head>
+  <body onload="validarSessao()">
+    <div class="container_all">
+      <div class="container_menu">
+        <div class="menu_top">
+          <div class="div_well_come">
+            <h2>Bem vindo, <span id="b_usuario"></span></h2>
+          </div>
+
+          <ul>
+            <li><a href="pergunta.html"><button>Pergunta</button></a></li>
+            <li><a href="atualizarCadastro.html"><button>Atualizar cadastro</button></a></li>
+            <li><a href="dashboard.html"></a></li>
+          </ul>
+        </div>
+        <button class="btn_sair" onclick="limparSessao()">Sair</button>
+      </div>
+      <div class="container_quest">
+        <div class="section_quest">
+          <h1>Atualizar cadastro</h1>
+          <div class="div_email">
+            <input
+              class="inputs"
+              type="text"
+              id="ipt_email"
+              placeholder="Novo email"
+            />
+
+            <i class="fa-regular fa-envelope fa-lg" style="color: #717171"></i>
+          </div>
+          <div class="div_email">
+            <input
+              class="inputs"
+              type="text"
+              id="ipt_nome"
+              placeholder="Novo nome"
+            />
+            <i
+              class="fa-regular fa-user fa-xl"
+              style="color: rgb(113, 113, 113)"
+            ></i>
+          </div>
+          <div class="div_email">
+            <input
+              class="inputs"
+              type="password"
+              id="ipt_senha"
+              placeholder="Nova senha"
+            />
+            <i class="fa-regular fa-eye-slash fa-xl" style="color: #717171"></i>
+          </div>
+          <div class="div_email">
+            <input
+              class="inputs"
+              type="password"
+              id="ipt_senha_confirm"
+              placeholder="Confirme sua senha para atualizar"
+            />
+            <i class="fa-regular fa-eye-slash fa-xl" style="color: #717171"></i>
+          </div>
+          <div class="button_att">
+            <button onclick="atualizar()" class="btn_att">Atualizar</button>
+          <button onclick="excluir() "class="btn_att" style="background-color: rgb(190, 34, 34);">Excluir cadastro</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  function excluir() {
+    fetch("/usuarios/excluir", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        idServer: sessionStorage.ID_USUARIO,
+      }),
+    })
+      .then(function (resposta) {
+        console.log("resposta: ", resposta);
+        if (resposta.ok) {
+          alert("Cadastro excluido");
+          limparSessao()
+        } else {
+          throw "Houve um erro ao tentar atualizar o cadastro";
+        }
+      })
+      .catch(function (resposta) {
+        console.log(`#ERRO: ${resposta}`);
+      });
+  }
+  function atualizar() {
+    var nomeVar = ipt_nome.value;
+    var emailVar = ipt_email.value;
+    var senhaVar = ipt_senha.value;
+    var senhaConfirVar = ipt_senha_confirm.value;
+
+    if (nomeVar == "") {
+      nomeVar = sessionStorage.NOME_USUARIO;
+    }
+    if (emailVar == "") {
+      emailVar = sessionStorage.EMAIL_USUARIO;
+    }
+    if (senhaVar == "") {
+      senhaVar = sessionStorage.SENHA_USUARIO;
+    }
+    if (senhaConfirVar != sessionStorage.SENHA_USUARIO) {
+      alert("Senha incorreta");
+    } else {
+      fetch("/usuarios/atualizar", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          nomeServer: nomeVar,
+          emailServer: emailVar,
+          senhaServer: senhaVar,
+          idServer: sessionStorage.ID_USUARIO,
+        }),
+      })
+        .then(function (resposta) {
+          console.log("resposta: ", resposta);
+
+          if (resposta.ok) {
+            alert("Cadastro atualizado");
+          } else {
+            throw "Houve um erro ao tentar atualizar o cadastro";
+          }
+        })
+        .catch(function (resposta) {
+          console.log(`#ERRO: ${resposta}`);
+        });
+    }
+  }
+</script>

@@ -1,9 +1,10 @@
 var database = require("../database/config")
+let dataAtual = new Date();
 
 function autenticar(email, senha) {
     console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function entrar(): ", email, senha)
     var instrucaoSql = `
-        SELECT idUsuario, nome, email FROM usuario WHERE email = '${email}' AND senha = '${senha}';
+        SELECT idUsuario, nome, email, senha FROM usuario WHERE email = '${email}' AND senha = '${senha}' AND ativo = 'A';
     `;
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql);
@@ -16,13 +17,33 @@ function cadastrar(nome, email, senha) {
     // Insira exatamente a query do banco aqui, lembrando da nomenclatura exata nos valores
     //  e na ordem de inserção dos dados.
     var instrucaoSql = `
-        INSERT INTO usuario (nome, email, senha) VALUES ('${nome}', '${email}', '${senha}');
+        INSERT INTO usuario (nome, email, senha, ativo) VALUES ('${nome}', '${email}', '${senha}', 'A');
     `;
+    
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql);
 }
+function cadastrarLog(fkUsuario){
+    var dtHora = `${dataAtual.getFullYear()}-${dataAtual.getMonth()}-${dataAtual.getDate()} ${dataAtual.getHours()}:${dataAtual.getMinutes()}:${dataAtual.getSeconds()}` 
+    console.log(dataAtual.getDay())
+    var instrucaoSql = `INSERT INTO log (dtHrAcesso, fkUsuario) VALUES ('${dtHora}', ${fkUsuario})`
+    return database.executar(instrucaoSql);
+}
 
+function atualizar(nome,email,senha, id){
+    var instrucaoSql = `UPDATE usuario set nome = '${nome}', email = '${email}', senha ='${senha}' WHERE idUsuario = ${id}`
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+function excluir(id){
+    var instrucaoSql = `UPDATE usuario set ativo = 'I' WHERE idUsuario = ${id}`
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
 module.exports = {
     autenticar,
-    cadastrar
+    cadastrar,
+    atualizar,
+    cadastrarLog,
+    excluir
 };
