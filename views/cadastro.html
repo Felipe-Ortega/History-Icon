@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="css/style_login.css" />
+    <script
+      src="https://kit.fontawesome.com/39f3be7d68.js"
+      crossorigin="anonymous"
+    ></script>
+  <script src="../public/js/sessao.js"></script>
+
+  </head>
+  <body>
+    <div class="container_all">
+      <div class="div_login">
+        <img src="images/logo_history_black.png" alt="" />
+        <div class="div_email">
+          <input
+            class="inputs"
+            type="text"
+            id="ipt_email"
+            placeholder="Email"
+          />
+
+          <i class="fa-regular fa-envelope fa-lg" style="color: #717171"></i>
+        </div>
+        <div class="div_email">
+          <input class="inputs" type="text" id="ipt_nome" placeholder="Nome" />
+          <i
+            class="fa-regular fa-user fa-xl"
+            style="color: rgb(113, 113, 113)"
+          ></i>
+        </div>
+        <div class="div_email">
+          <input
+            class="inputs"
+            type="password"
+            id="ipt_senha"
+            placeholder="Senha"
+          />
+          <i class="fa-regular fa-eye-slash fa-xl" style="color: #717171"></i>
+        </div>
+        <div class="div_email">
+          <input
+            class="inputs"
+            type="password"
+            id="ipt_senha_confirm"
+            placeholder="Confirme sua senha"
+          />
+          <i class="fa-regular fa-eye-slash fa-xl" style="color: #717171"></i>
+        </div>
+        <button onclick="cadastrar()" class="btn_enter">Cadastrar-se</button>
+        <span id="mensagem_erro"></span>
+
+        <a href="login.html"><h5>Já possui conta? Acesse já!</h5></a>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  function cadastrar(){
+    var nomeVar = ipt_nome.value;
+  var emailVar = ipt_email.value;
+  var senhaVar = ipt_senha.value;
+  var senhaConfirVar = ipt_senha_confirm.value;
+  
+  fetch("/usuarios/cadastrar", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        // crie um atributo que recebe o valor recuperado aqui
+        // Agora vá para o arquivo routes/usuario.js
+        nomeServer: nomeVar,
+        emailServer: emailVar,
+        senhaServer: senhaVar
+      }),
+    })
+      .then(function (resposta) {
+        console.log("resposta: ", resposta);
+
+        if (resposta.ok) {
+
+          mensagem_erro.innerHTML =
+            "Cadastro realizado com sucesso! Redirecionando para tela de Login...";
+
+          setTimeout(() => {
+            window.location = "login.html";
+          }, "2000");
+
+          limparFormulario();
+          finalizarAguardar();
+        } else {
+          throw "Houve um erro ao tentar realizar o cadastro!";
+        }
+      })
+      .catch(function (resposta) {
+        console.log(`#ERRO: ${resposta}`);
+        finalizarAguardar();
+      });
+
+    return false;
+  }
+
+</script>
