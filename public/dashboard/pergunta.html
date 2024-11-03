@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="../css/style_pergunta.css" />
+    <script
+      src="https://kit.fontawesome.com/39f3be7d68.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="../js/sessao.js"></script>
+    <script src="../js/alerta.js"></script>
+
+  </head>
+  <body onload="validarSessao()">
+    <div class="container_all">
+      <div class="container_menu">
+        <div class="menu_top">
+          <div class="div_well_come">
+            <h2>Bem vindo, <span id="b_usuario"></span></h2>
+          </div>
+
+          <ul>
+            <li><button>Atualizar cadastro</button></li>
+            <li><button>Dashboard</button></li>
+          </ul>
+        </div>
+        <button class="btn_sair" onclick="limparSessao()">Sair</button>
+      </div>
+      <div class="container_quest">
+        <div class="section_quest">
+          <h1>Titulo da pergunta</h1>
+          <div class="section_buttons">
+            <div class="div_button">
+              <button>
+                <i class="fa-solid fa-square-root-variable fa-2xl"></i>
+                <p>Matemática</p>
+              </button>
+            </div>
+            <div class="div_button">
+              <button>
+                <i class="fa-solid fa-flask-vial fa-2xl"></i>
+                <p>Quimica</p>
+              </button>
+            </div>
+          </div>
+          <button id="next_quest">Próxima questão</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
