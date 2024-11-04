@@ -89,8 +89,9 @@ function excluir(req, res) {
 }
 function cadastrarLog(req, res) {
   var fkUsuario = req.body.idServer;
+  var dtHora = req.body.dtServer;
   usuarioModel
-    .cadastrarLog(fkUsuario)
+    .cadastrarLog(fkUsuario, dtHora)
     .then(function (resultado) {
       res.json(resultado);
     })

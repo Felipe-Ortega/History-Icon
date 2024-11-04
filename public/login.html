@@ -50,7 +50,8 @@
 <script>
   function entrar() {
     // aguardar();
-
+    let dataAtual = new Date();
+    var dtHora = `${dataAtual.getFullYear()}-${dataAtual.getMonth()}-${dataAtual.getDate()} ${dataAtual.getHours()}:${dataAtual.getMinutes()}:${dataAtual.getSeconds()}`;
     var emailVar = ipt_email.value;
     var senhaVar = ipt_senha.value;
 
@@ -90,6 +91,7 @@
             sessionStorage.ID_USUARIO = json.id;
             sessionStorage.SENHA_USUARIO = json.senha;
 
+            console.log(dataAtual.getDay());
             fetch("/usuarios/cadastrarLog", {
               method: "POST",
               headers: {
@@ -97,6 +99,7 @@
               },
               body: JSON.stringify({
                 idServer: json.id,
+                dtServer: dtHora,
               }),
             })
               .then(function (resposta) {
