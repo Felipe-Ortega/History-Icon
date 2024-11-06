@@ -74,25 +74,30 @@
     var senhaConfirVar = ipt_senha_confirm.value;
     var emailVar = ipt_email.value;
     var senhaVar = ipt_senha.value;
+    var validacoes = 0;
     if (
       emailVar.includes("@") &&
       (emailVar.endsWith(".com") || emailVar.endsWith(".br")) &&
       emailVar.length > 10
     ) {
       div_erro_email.innerHTML = ``;
+      validacoes++;
     } else {
-      div_erro_email.innerHTML = `Email inválido`;
+      div_erro_email.innerHTML = `<span style="color:red">Email inválido</span>`;
     }
 
     for (i = 0; i < senhaVar.length; i++) {
       if (!isNaN(senhaVar[i])) {
         contem_numero = true;
         i = senhaVar.length;
+        validacoes++;
       }
     }
     if (nomeVar.length < 3) {
-      div_erro_nome.innerHTML = `O nome deve possuir pelo menos 3 caracteres`;
+      div_erro_nome.innerHTML = `<span style="color:red">O nome deve possuir pelo menos 3 caracteres</span>`;
     } else {
+      validacoes++;
+
       div_erro_nome.innerHTML = ``;
     }
     if (
@@ -108,29 +113,23 @@
       contem_numero &&
       senhaVar.length >= 8
     ) {
+      validacoes++;
       div_erro_senha.innerHTML = ``;
     } else {
-      div_erro_senha.innerHTML = `Sua senha deve conter 8 caracteres, 1 letra maiuscula, 1 letra minuscula, 1 número e 1 caractere especial`;
+      div_erro_senha.innerHTML = `
+      <span style="color:red">Sua senha deve conter 8 caracteres, 1 letra maiuscula, 1 letra minuscula, 1 número e 1 caractere especial</span>
+      `;
     }
     if (senhaVar != senhaConfirVar) {
-      div_erro_confirm_senha.innerHTML = `As senhas não coincidem`;
+      div_erro_confirm_senha.innerHTML = `<span style="color:red">As senhas não coincidem</span>`;
     } else {
+      validacoes++;
       div_erro_confirm_senha.innerHTML = ``;
     }
     if (
-      nomeVar == "" ||
-      emailVar == "" ||
-      senhaVar == "" ||
-      senhaConfirVar == ""
+      validacoes == 5
     ) {
-      mensagem_erro.innerHTML =
-        "(Mensagem de erro para todos os campos em branco)";
-      finalizarAguardar();
-      return false;
-    } else {
-      if (senhaVar != senhaConfirVar) {
-        mensagem_erro.innerHTML = "(As senhas não coincidem)";
-      } else {
+      mensagem_erro.innerHTML = "(As senhas não coincidem)";
         fetch("/usuarios/cadastrar", {
           method: "POST",
           headers: {
@@ -161,9 +160,6 @@
             console.log(`#ERRO: ${resposta}`);
             // finalizarAguardar();
           });
-      }
     }
-
-    return false;
   }
 </script>

@@ -148,7 +148,7 @@
       alternativaB: "Galileu Galilei",
       alternativaC: "Nicolau Copérnico",
       alternativaD: "Cristóvão Colombo",
-      alternativaCorreta: "Galileu Galilei",
+      alternativaCorreta: "Nicolau Copérnico",
     },
     {
       id: 6,
@@ -323,10 +323,9 @@
     }
   }
   function enviarResposta() {
+    nextQuest();
     verificaPontuacao();
-    section_quest.innerHTML = `<h1>Sua pontuação</h1> <br> <h2> ${qtdAcertos}/10 </h2> <br>
-    <span>Você acertou as questões: ${listaDeAcertos}</span>
-    `
+    mostrarAcertosEErros()
     var fkUsuario = sessionStorage.ID_USUARIO;
     for (var index = 0; index < listaRespostas.length; index++) {
       var fkPergunta = listaPerguntas[index].id
@@ -420,5 +419,22 @@
     listaInserirNoBanco[index].resposta = listaRespostas[index];
     listaInserirNoBanco[index].isCorreta = listaIsCorreta[index];
    } 
+  }
+
+  function mostrarAcertosEErros(){
+    for (var index = 0; index < listaRespostas.length; index++) {
+      mensagem += `Pergunta: ${listaPerguntas[index].id} <br>
+      Resposta: ${listaRespostas[index]}<br>
+      Resposta Correta: ${listaPerguntas[index].alternativaCorreta} <br>
+      `
+      if (listaIsCorreta[index] == 'A') {
+        mensagem += `Parabéns! Voce acertou`
+      } else{
+        mensagem += `Você errou! Quem sabe da próxima`
+      }
+    }
+    section_quest.innerHTML = `<h1>Sua pontuação</h1> <br> <h2> ${qtdAcertos}/10 </h2> <br>
+    <span>Você acertou as questões: ${listaDeAcertos} <div>${mensagem}</div></span>
+    `
   }
 </script>
