@@ -32,6 +32,7 @@ function atualizar(nome,email,senha, id){
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql);
 }
+
 function excluir(id){
     var instrucaoSql = `UPDATE usuario set ativo = 'I' WHERE idUsuario = ${id}`
     console.log("Executando a instrução SQL: \n" + instrucaoSql);

@@ -24,7 +24,7 @@ function autenticar(req, res) {
           });
         } else if (resultadoAutenticar.length == 0) {
           res.status(403).send("Email e/ou senha inválido(s)");
-          alert("Email e/ou senha inválido(s)")
+          alert("Email e/ou senha inválido(s)");
         } else {
           res.status(403).send("Mais de um usuário com o mesmo login e senha!");
         }
@@ -87,6 +87,7 @@ function excluir(req, res) {
       res.status(500).json(erro.sqlMessage);
     });
 }
+
 function cadastrarLog(req, res) {
   var fkUsuario = req.body.idServer;
   var dtHora = req.body.dtServer;

@@ -18,7 +18,7 @@
     <div class="container_all">
       <div class="div_login">
         <img src="images/logo_history_black.png" alt="" />
-        <div class="div_email card_erro" id="cardErro">
+        <div class="div_email" >
           <input
             class="inputs"
             type="text"
@@ -30,7 +30,8 @@
             style="color: rgb(113, 113, 113)"
           ></i>
         </div>
-        <div class="div_email card_erro" id="cardErro">
+        <div id="div_erro_email"></div>
+        <div class="div_email" id="cardErro">
           <input
             class="inputs"
             type="password"
@@ -39,9 +40,10 @@
           />
           <i class="fa-regular fa-eye-slash fa-xl" style="color: #717171"></i>
         </div>
+        <div id="div_erro_senha" style="text-align: center;"></div>
         <button onclick="entrar()" class="btn_enter">Entrar</button>
+        <div id="mensagem_erro"></div>
         <a href="Cadastro.html"><h5>Não possui conta? Cadastre-se</h5></a>
-        <div id="div_erros_login"></div>
       </div>
     </div>
   </body>
@@ -51,19 +53,53 @@
   function entrar() {
     // aguardar();
     let dataAtual = new Date();
-    var dtHora = `${dataAtual.getFullYear()}-${dataAtual.getMonth()}-${dataAtual.getDate()} ${dataAtual.getHours()}:${dataAtual.getMinutes()}:${dataAtual.getSeconds()}`;
+    var minuto = dataAtual.getMinutes();
+    if (minuto.lenght == 1) {
+      minuto[1] = minuto[0]
+      minuto[0] = '0'
+    }
+    var dtHora = `${dataAtual.getFullYear()}-${dataAtual.getMonth()}-${dataAtual.getDate()} ${dataAtual.getHours()}:${minuto}:${dataAtual.getSeconds()}`;
     var emailVar = ipt_email.value;
     var senhaVar = ipt_senha.value;
+    if (
+      emailVar.includes("@") &&
+      (emailVar.endsWith(".com") || emailVar.endsWith(".br")) &&
+      emailVar.length > 10
+    ) {
+      div_erro_email.innerHTML = ``
 
-    if (emailVar == "" || senhaVar == "") {
-      //   cardErro.style.display = "block";
-      mensagem_erro.innerHTML =
-        "(Mensagem de erro para todos os campos em branco)";
-      finalizarAguardar();
-      return false;
+
     } else {
-      //   setInterval(sumirMensagem, 5000);
+      div_erro_email.innerHTML = `Email inválido`
     }
+ 
+
+    for (i = 0; i < senhaVar.length; i++) {
+      if (!isNaN(senhaVar[i])) {
+        contem_numero = true;
+        i = senhaVar.length;
+      }
+    }
+
+
+    if (
+      (senhaVar.includes(".") ||
+        senhaVar.includes("#") ||
+        senhaVar.includes("!") ||
+        senhaVar.includes("_") ||
+        senhaVar.includes("-") ||
+        senhaVar.includes("$") ||
+        senhaVar.includes("@")) &&
+      senhaVar.toUpperCase() != senhaVar &&
+      senhaVar.toLowerCase() != senhaVar &&
+      contem_numero &&
+      senhaVar.length >= 8 
+    ) {
+      div_erro_senha.innerHTML = ``
+    } else{
+      div_erro_senha.innerHTML = `Sua senha deve conter 8 caracteres, 1 letra maiuscula, 1 letra minuscula, 1 número e 1 caractere especial`
+    }
+
 
     console.log("FORM LOGIN: ", emailVar);
     console.log("FORM SENHA: ", senhaVar);
@@ -80,7 +116,6 @@
     })
       .then(function (resposta) {
         console.log("ESTOU NO THEN DO entrar()!");
-
         if (resposta.ok) {
           console.log(resposta);
           resposta.json().then((json) => {
@@ -90,7 +125,6 @@
             sessionStorage.NOME_USUARIO = json.nome;
             sessionStorage.ID_USUARIO = json.id;
             sessionStorage.SENHA_USUARIO = json.senha;
-
             console.log(dataAtual.getDay());
             fetch("/usuarios/cadastrarLog", {
               method: "POST",
@@ -106,20 +140,16 @@
                 if (resposta.ok) {
                   console.log("resposta: ", resposta);
                 } else {
-                  throw "Houve um erro ao tentar realizar o cadastro de log!";
                 }
               })
               .catch(function (resposta) {
                 console.log(`#ERRO: ${resposta}`);
               });
-            window.location = "./dashboard/pergunta.html";
           });
         } else {
-          console.log("Houve um erro ao tentar realizar o login!");
-
+          mensagem_erro.innerHTML = `Login e/ou senha inválidos!`;
           resposta.text().then((texto) => {
             console.error(texto);
-            // finalizarAguardar(texto);
           });
         }
       })

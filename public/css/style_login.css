@@ -42,8 +42,18 @@ a{
     margin: 20px;
 
 }
+.card_erro {
+    background-color: #fff;
+    color: black;
+    width: 230px;
+    position: fixed;
+    border-radius: 4px;
+    border: #ED145B 3px solid;
+    padding: 10px;
+    margin-right: 10%;
+  }
 .inputs{
-    background-color: #D9D9D9;
+    background-color: aliceblue;
     height: 3vh;
     width: 100%;
     font-size: 20px;

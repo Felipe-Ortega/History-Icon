@@ -92,6 +92,8 @@
               >
                 Próxima questão
               </button>
+              <button onclick="listarRespostas()">Listar</button>
+              <div id="div_teste"></div>
             </div>
           </div>
         </div>
@@ -102,6 +104,7 @@
 <script>
   var listaPerguntas = [
     {
+      id: 1,
       pergunta: "Quem criou a teoria da relatividade?",
       alternativaA: "Isaac Newton",
       alternativaB: "Max Planck",
@@ -110,6 +113,7 @@
       alternativaCorreta: "Albert Einsten",
     },
     {
+      id: 2,
       pergunta: "Qual o nome do guerreiro que inspirou a maratona?",
       alternativaA: "Fidípides",
       alternativaB: "Leônidas",
@@ -118,6 +122,7 @@
       alternativaCorreta: "Fidípides",
     },
     {
+      id: 3,
       pergunta:
         "Quem foi o matemático a chegar mais próximo de PI na idade antiga?",
       alternativaA: "Pitágoras",
@@ -127,6 +132,7 @@
       alternativaCorreta: "Arquemedes",
     },
     {
+      id: 4,
       pergunta: "Qual a velocidade da luz no vácuo?",
       alternativaA: "300.000.000 m/s",
       alternativaB: "300.000.000 km/h",
@@ -135,6 +141,7 @@
       alternativaCorreta: "300.000.000 m/s",
     },
     {
+      id: 5,
       pergunta:
         "Quem foi o primeiro astrônomo a dizer que a Terra gira em torno do Sol?",
       alternativaA: "Johannes Kepler",
@@ -144,6 +151,7 @@
       alternativaCorreta: "Galileu Galilei",
     },
     {
+      id: 6,
       pergunta:
         "Caso o Sol suma repentinamente, quanto tempo demoraria para perceber-mos?",
       alternativaA: "5 minutos",
@@ -153,6 +161,7 @@
       alternativaCorreta: "8,5 minutos",
     },
     {
+      id: 7,
       pergunta:
         "Quem originou a ideia de que 2 corpos não ocupam o mesmo espaço?",
       alternativaA: "Huygens",
@@ -162,6 +171,7 @@
       alternativaCorreta: "Isaac Newton",
     },
     {
+      id: 8,
       pergunta: "Quem é o pai da filosofia?",
       alternativaA: "Tales de Mileto",
       alternativaB: "Sócrates",
@@ -170,6 +180,7 @@
       alternativaCorreta: "Tales de Mileto",
     },
     {
+      id: 9,
       pergunta: "Quem criou a tabela periódica atual?",
       alternativaA: "Antoine Lavoisier",
       alternativaB: "Dmitri Mendeleiev",
@@ -178,6 +189,7 @@
       alternativaCorreta: "Dmitri Mendeleiev",
     },
     {
+      id: 10,
       pergunta: "Quem foi a primeira pessoa a escrever um algoritmo?",
       alternativaA: "Bill Gates",
       alternativaB: "Alan Turing",
@@ -188,7 +200,7 @@
   ];
   var listaRespostas = [];
   var indiceQuestao = 0;
-var qtdAcertos = 0;
+  var qtdAcertos = 0;
 
   div_titulo_pergunta.innerHTML = listaPerguntas[indiceQuestao].pergunta;
   alternativaA.innerHTML = listaPerguntas[indiceQuestao].alternativaA;
@@ -200,7 +212,7 @@ var qtdAcertos = 0;
   const bt2 = document.getElementById(`opt2`);
   const bt3 = document.getElementById(`opt3`);
   const bt4 = document.getElementById(`opt4`);
-  var listaBotoes = [bt,bt2,bt3,bt4];
+  var listaBotoes = [bt, bt2, bt3, bt4];
 
   bt.setAttribute("value", listaPerguntas[indiceQuestao].alternativaA);
   bt2.setAttribute("value", listaPerguntas[indiceQuestao].alternativaB);
@@ -270,7 +282,7 @@ var qtdAcertos = 0;
     }
     for (let index = 0; index < listaBotoes.length; index++) {
       if (listaBotoes[index].classList == "div_button_pressed") {
-        listaRespostas.push(listaBotoes[index].value)
+        listaRespostas.push(listaBotoes[index].value);
       }
     }
     bt.setAttribute("value", listaPerguntas[indiceQuestao].alternativaA);
@@ -278,7 +290,6 @@ var qtdAcertos = 0;
     bt3.setAttribute("value", listaPerguntas[indiceQuestao].alternativaC);
     bt4.setAttribute("value", listaPerguntas[indiceQuestao].alternativaD);
     //Verifico qual botão foi escolhido
-
   }
   function backQuest() {
     bt.setAttribute("value", listaPerguntas[indiceQuestao].alternativaA);
@@ -291,16 +302,123 @@ var qtdAcertos = 0;
       choseQuestion();
     }
   }
-  function verificaPontuacao(){
-    for (let index = 0; index < listaRespostas.length; index++) {
-      console.log(listaRespostas[index], listaPerguntas[index].alternativaCorreta)
+  var listaDeAcertos = [];
+  var listaIsCorreta = [];
+  function verificaPontuacao() {
+    listaDeAcertos = [];
+    for (var index = 0; index < listaRespostas.length; index++) {
+      console.log(
+        listaRespostas[index],
+        listaPerguntas[index].alternativaCorreta
+      );
       if (listaRespostas[index] == listaPerguntas[index].alternativaCorreta) {
-        qtdAcertos++
+        qtdAcertos++;
+        var nmrQuestao = index+1
+        listaDeAcertos.push(nmrQuestao)
+        listaIsCorreta.push("S")
+        console.log(listaDeAcertos);
+      } else {
+        listaIsCorreta.push("N")
       }
     }
   }
-  function enviarResposta(){
-    verificaPontuacao()
-    section_quest.innerHTML = `<h1>Sua pontuação</h1> <br> <h2> ${qtdAcertos}/10 </h2>`
+  function enviarResposta() {
+    verificaPontuacao();
+    section_quest.innerHTML = `<h1>Sua pontuação</h1> <br> <h2> ${qtdAcertos}/10 </h2> <br>
+    <span>Você acertou as questões: ${listaDeAcertos}</span>
+    `
+    var fkUsuario = sessionStorage.ID_USUARIO;
+    for (var index = 0; index < listaRespostas.length; index++) {
+      var fkPergunta = listaPerguntas[index].id
+      var resposta = listaRespostas[index]
+      var isCorreta = listaIsCorreta[index]
+      fetch("/pergunta/cadastrar", {
+        method: "POST",
+        headers: {
+        "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          idServer: fkUsuario,
+          fkPergunta: fkPergunta,
+          resposta: resposta,
+          isCorreta: isCorreta
+        }),
+      }).then(function (resposta) {
+        console.log("resposta: ", resposta);
+
+        if (resposta.ok) {
+          console.log(`Resposta ${index} cadastrada com sucesso`)
+        } else {
+          throw "Houve um erro ao tentar realizar o cadastro!";
+        }
+      })
+      .catch(function (resposta) {
+        console.log(`#ERRO: ${resposta}`);
+      });
+    }
+    ;
+  }
+  var listaRespostasCertas = [];
+  function listarRespostas() {
+    fetch("/pergunta/listar")
+      .then(function (resposta) {
+        if (resposta.ok) {
+          if (resposta.status == 204) {
+            console.log("SELECT FEITO");
+            throw "Nenhum resultado encontrado";
+          }
+
+          resposta.json().then(function (resposta) {
+            console.log("Dados recebidos: ", JSON.stringify(resposta));
+            for (var index = 0; index < resposta.length; index++) {
+              listaRespostasCertas.push(resposta[index]);
+            }
+          });
+        } else {
+          throw "Houve um erro na API!";
+        }
+      })
+      .catch(function (resposta) {
+        console.error(resposta);
+      });
+  }
+  var listaInserirNoBanco = [{idPergunta:"",
+      resposta: "",
+      isCorreta: "",
+    },{idPergunta:"",
+      resposta: "",
+      isCorreta: "",
+    },{idPergunta:"",
+      resposta: "",
+      isCorreta: "",
+    },{idPergunta:"",
+      resposta: "",
+      isCorreta: "",
+    },{idPergunta:"",
+      resposta: "",
+      isCorreta: "",
+    },{idPergunta:"",
+      resposta: "",
+      isCorreta: "",
+    },{idPergunta:"",
+      resposta: "",
+      isCorreta: "",
+    },{idPergunta:"",
+      resposta: "",
+      isCorreta: "",
+    },{idPergunta:"",
+      resposta: "",
+      isCorreta: "",
+    },{idPergunta:"",
+      resposta: "",
+      isCorreta: "",
+    },
+  ]
+  function organizaErrosAcertos(){
+   for (let index = 0; index < listaInserirNoBanco; index++) {
+    listaInserirNoBanco[index].idPergunta = listaPerguntas.id[index];
+    listaInserirNoBanco[index].resposta = listaRespostas[index];
+    listaInserirNoBanco[index].isCorreta = listaIsCorreta[index];
+   } 
   }
 </script>

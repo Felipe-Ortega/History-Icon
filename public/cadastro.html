@@ -1,129 +1,169 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AquaTech | Cadastro</title>
 
-  <title>AquaTech | Cadastro</title>
+    <script src="./js/sessao.js"></script>
 
-  <script src="./js/sessao.js"></script>
+    <link rel="stylesheet" href="./css/style_login.css" />
+    <link rel="icon" href="./assets/icon/favicon2.ico" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+  </head>
 
-  <link rel="stylesheet" href="./css/style_login.css" />
-  <link rel="icon" href="./assets/icon/favicon2.ico" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" />
-</head>
+  <body onload="">
+    <div class="container_all">
+      <div class="div_login">
+        <img src="images/logo_history_black.png" alt="" />
+        <div class="div_email">
+          <input
+            class="inputs"
+            type="text"
+            id="ipt_email"
+            placeholder="Email"
+          />
 
-<body onload="">
-  <div class="container_all">
-    <div class="div_login">
-      <img src="images/logo_history_black.png" alt="" />
-      <div class="div_email">
-        <input
-          class="inputs"
-          type="text"
-          id="ipt_email"
-          placeholder="Email"
-        />
+          <i class="fa-regular fa-envelope fa-lg" style="color: #717171"></i>
+        </div>
+        <div id="div_erro_email"></div>
+        <div class="div_email">
+          <input class="inputs" type="text" id="ipt_nome" placeholder="Nome" />
+          <i
+            class="fa-regular fa-user fa-xl"
+            style="color: rgb(113, 113, 113)"
+          ></i>
+        </div>
+        <div id="div_erro_nome"></div>
 
-        <i class="fa-regular fa-envelope fa-lg" style="color: #717171"></i>
+        <div class="div_email">
+          <input
+            class="inputs"
+            type="password"
+            id="ipt_senha"
+            placeholder="Senha"
+          />
+          <i class="fa-regular fa-eye-slash fa-xl" style="color: #717171"></i>
+        </div>
+        <div id="div_erro_senha" style="text-align: center"></div>
+        <div class="div_email">
+          <input
+            class="inputs"
+            type="password"
+            id="ipt_senha_confirm"
+            placeholder="Confirme sua senha"
+          />
+          <i class="fa-regular fa-eye-slash fa-xl" style="color: #717171"></i>
+        </div>
+        <div id="div_erro_confirm_senha" style="text-align: center"></div>
+        <button onclick="cadastrar()" class="btn_enter">Cadastrar-se</button>
+        <span id="mensagem_erro"></span>
+        <a href="login.html"><h5>Já possui conta? Acesse já!</h5></a>
       </div>
-      <div class="div_email">
-        <input class="inputs" type="text" id="ipt_nome" placeholder="Nome" />
-        <i
-          class="fa-regular fa-user fa-xl"
-          style="color: rgb(113, 113, 113)"
-        ></i>
-      </div>
-      <div class="div_email">
-        <input
-          class="inputs"
-          type="password"
-          id="ipt_senha"
-          placeholder="Senha"
-        />
-        <i class="fa-regular fa-eye-slash fa-xl" style="color: #717171"></i>
-      </div>
-      <div class="div_email">
-        <input
-          class="inputs"
-          type="password"
-          id="ipt_senha_confirm"
-          placeholder="Confirme sua senha"
-        />
-        <i class="fa-regular fa-eye-slash fa-xl" style="color: #717171"></i>
-      </div>
-      <button onclick="cadastrar()" class="btn_enter">Cadastrar-se</button>
-      <span id="mensagem_erro"></span>
-
-      <a href="login.html"><h5>Já possui conta? Acesse já!</h5></a>
     </div>
-  </div>
-</body>
-
+  </body>
 </html>
 
 <script>
-
-
   function cadastrar() {
     var nomeVar = ipt_nome.value;
-  var emailVar = ipt_email.value;
-  var senhaVar = ipt_senha.value;
-  var senhaConfirVar = ipt_senha_confirm.value;
+    var emailVar = ipt_email.value;
+    var senhaVar = ipt_senha.value;
+    var senhaConfirVar = ipt_senha_confirm.value;
+    var emailVar = ipt_email.value;
+    var senhaVar = ipt_senha.value;
+    if (
+      emailVar.includes("@") &&
+      (emailVar.endsWith(".com") || emailVar.endsWith(".br")) &&
+      emailVar.length > 10
+    ) {
+      div_erro_email.innerHTML = ``;
+    } else {
+      div_erro_email.innerHTML = `Email inválido`;
+    }
 
+    for (i = 0; i < senhaVar.length; i++) {
+      if (!isNaN(senhaVar[i])) {
+        contem_numero = true;
+        i = senhaVar.length;
+      }
+    }
+    if (nomeVar.length < 3) {
+      div_erro_nome.innerHTML = `O nome deve possuir pelo menos 3 caracteres`;
+    } else {
+      div_erro_nome.innerHTML = ``;
+    }
+    if (
+      (senhaVar.includes(".") ||
+        senhaVar.includes("#") ||
+        senhaVar.includes("!") ||
+        senhaVar.includes("_") ||
+        senhaVar.includes("-") ||
+        senhaVar.includes("$") ||
+        senhaVar.includes("@")) &&
+      senhaVar.toUpperCase() != senhaVar &&
+      senhaVar.toLowerCase() != senhaVar &&
+      contem_numero &&
+      senhaVar.length >= 8
+    ) {
+      div_erro_senha.innerHTML = ``;
+    } else {
+      div_erro_senha.innerHTML = `Sua senha deve conter 8 caracteres, 1 letra maiuscula, 1 letra minuscula, 1 número e 1 caractere especial`;
+    }
+    if (senhaVar != senhaConfirVar) {
+      div_erro_confirm_senha.innerHTML = `As senhas não coincidem`;
+    } else {
+      div_erro_confirm_senha.innerHTML = ``;
+    }
     if (
       nomeVar == "" ||
       emailVar == "" ||
       senhaVar == "" ||
       senhaConfirVar == ""
     ) {
-      cardErro.style.display = "block";
       mensagem_erro.innerHTML =
         "(Mensagem de erro para todos os campos em branco)";
-
       finalizarAguardar();
       return false;
     } else {
+      if (senhaVar != senhaConfirVar) {
+        mensagem_erro.innerHTML = "(As senhas não coincidem)";
+      } else {
+        fetch("/usuarios/cadastrar", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            nomeServer: nomeVar,
+            emailServer: emailVar,
+            senhaServer: senhaVar,
+          }),
+        })
+          .then(function (resposta) {
+            console.log("resposta: ", resposta);
+
+            if (resposta.ok) {
+              setTimeout(() => {
+                window.location = "login.html";
+              }, "2000");
+              mensagem_erro.innerHTML =
+                "Cadastro realizado com sucesso! Redirecionando para tela de Login...";
+            } else {
+              mensagem_erro.innerHTML =
+                "Verifique se você preencheu todos os dados corretamente";
+              throw "Houve um erro ao tentar realizar o cadastro!";
+            }
+          })
+          .catch(function (resposta) {
+            console.log(`#ERRO: ${resposta}`);
+            // finalizarAguardar();
+          });
+      }
     }
-
-    fetch("/usuarios/cadastrar", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        nomeServer: nomeVar,
-        emailServer: emailVar,
-        senhaServer: senhaVar
-      }),
-    })
-      .then(function (resposta) {
-        console.log("resposta: ", resposta);
-
-        if (resposta.ok) {
-          // cardErro.style.display = "block";
-
-          mensagem_erro.innerHTML =
-            "Cadastro realizado com sucesso! Redirecionando para tela de Login...";
-
-          setTimeout(() => {
-            window.location = "login.html";
-          }, "2000");
-
-          // limparFormulario();
-          // finalizarAguardar();
-        } else {
-          throw "Houve um erro ao tentar realizar o cadastro!";
-        }
-      })
-      .catch(function (resposta) {
-        console.log(`#ERRO: ${resposta}`);
-        // finalizarAguardar();
-      });
 
     return false;
   }
-
 </script>
