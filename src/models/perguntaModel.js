@@ -5,8 +5,8 @@ function cadastrar(fkUsuario, fkPergunta, resposta, isCorreta) {
   return database.executar(instrucaoSql);
 }
 
-function listarRespostas() {
-  var instrucaoSql = `SELECT respostaCorreta FROM pergunta`;
+function listarRespostas(fkUsuario) {
+  var instrucaoSql = `SELECT resposta, isCorreta FROM resposta WHERE fkUsuario = ${fkUsuario}`;
   return database.executar(instrucaoSql);
 }
 module.exports = {

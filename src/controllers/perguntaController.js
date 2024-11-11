@@ -24,6 +24,7 @@ function cadastrar(req, res) {
       });
   }
 }
+
 function listarRespostas(req, res) {
   perguntaModel
     .listarRespostas().then(function (resultadoListar) {

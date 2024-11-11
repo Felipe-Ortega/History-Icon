@@ -81,6 +81,7 @@
               </button>
             </div>
           </div>
+          <span id="selec_erro"></span>
           <div class="div_button_back_next">
             <span id="div_back_quest"></span>
 
@@ -92,7 +93,6 @@
               >
                 Próxima questão
               </button>
-              <button onclick="listarRespostas()">Listar</button>
               <div id="div_teste"></div>
             </div>
           </div>
@@ -276,86 +276,101 @@
     }
   }
   function nextQuest() {
-    if (indiceQuestao < 9) {
-      indiceQuestao++;
-      choseQuestion();
-    }
-    for (let index = 0; index < listaBotoes.length; index++) {
-      if (listaBotoes[index].classList == "div_button_pressed") {
-        listaRespostas.push(listaBotoes[index].value);
+    if (indiceQuestao <= 9) {
+      var verificacao = false;
+      for (let index = 0; index < listaBotoes.length; index++) {
+        if (listaBotoes[index].className == "div_button_pressed") {
+          verificacao = true;
+          index = listaBotoes.length;
+        }
+      }
+      if (verificacao == true) {
+        if (indiceQuestao < 9) {
+          indiceQuestao++;
+        }
+        choseQuestion();
+        for (let index = 0; index < listaBotoes.length; index++) {
+          if (listaBotoes[index].classList == "div_button_pressed") {
+            listaRespostas.push(listaBotoes[index].value);
+          }
+        }
+        for (let index = 0; index < listaBotoes.length; index++) {
+          listaBotoes[index].classList.remove("div_button_pressed");
+          listaBotoes[index].classList.add("none");
+        }
+        bt.setAttribute("value", listaPerguntas[indiceQuestao].alternativaA);
+        bt2.setAttribute("value", listaPerguntas[indiceQuestao].alternativaB);
+        bt3.setAttribute("value", listaPerguntas[indiceQuestao].alternativaC);
+        bt4.setAttribute("value", listaPerguntas[indiceQuestao].alternativaD);
+        selec_erro.innerHTML = ``;
+        //Verifico qual botão foi escolhido
+      } else {
+        selec_erro.innerHTML = `Selecione uma opção`;
       }
     }
-    bt.setAttribute("value", listaPerguntas[indiceQuestao].alternativaA);
-    bt2.setAttribute("value", listaPerguntas[indiceQuestao].alternativaB);
-    bt3.setAttribute("value", listaPerguntas[indiceQuestao].alternativaC);
-    bt4.setAttribute("value", listaPerguntas[indiceQuestao].alternativaD);
-    //Verifico qual botão foi escolhido
   }
   function backQuest() {
-    bt.setAttribute("value", listaPerguntas[indiceQuestao].alternativaA);
-    bt2.setAttribute("value", listaPerguntas[indiceQuestao].alternativaB);
-    bt3.setAttribute("value", listaPerguntas[indiceQuestao].alternativaC);
-    bt4.setAttribute("value", listaPerguntas[indiceQuestao].alternativaD);
     if (indiceQuestao > 0) {
       indiceQuestao--;
       listaRespostas.pop();
       choseQuestion();
     }
+
+    bt.setAttribute("value", listaPerguntas[indiceQuestao].alternativaA);
+    bt2.setAttribute("value", listaPerguntas[indiceQuestao].alternativaB);
+    bt3.setAttribute("value", listaPerguntas[indiceQuestao].alternativaC);
+    bt4.setAttribute("value", listaPerguntas[indiceQuestao].alternativaD);
   }
   var listaDeAcertos = [];
   var listaIsCorreta = [];
   function verificaPontuacao() {
     listaDeAcertos = [];
     for (var index = 0; index < listaRespostas.length; index++) {
-      console.log(
-        listaRespostas[index],
-        listaPerguntas[index].alternativaCorreta
-      );
       if (listaRespostas[index] == listaPerguntas[index].alternativaCorreta) {
         qtdAcertos++;
-        var nmrQuestao = index+1
-        listaDeAcertos.push(nmrQuestao)
-        listaIsCorreta.push("S")
+        var nmrQuestao = index + 1;
+        listaDeAcertos.push(nmrQuestao);
+        listaIsCorreta.push("S");
         console.log(listaDeAcertos);
       } else {
-        listaIsCorreta.push("N")
+        listaIsCorreta.push("N");
       }
     }
   }
   function enviarResposta() {
     nextQuest();
     verificaPontuacao();
-    mostrarAcertosEErros()
     var fkUsuario = sessionStorage.ID_USUARIO;
     for (var index = 0; index < listaRespostas.length; index++) {
-      var fkPergunta = listaPerguntas[index].id
-      var resposta = listaRespostas[index]
-      var isCorreta = listaIsCorreta[index]
+      var fkPergunta = listaPerguntas[index].id;
+      var resposta = listaRespostas[index];
+      var isCorreta = listaIsCorreta[index];
       fetch("/pergunta/cadastrar", {
         method: "POST",
         headers: {
-        "Content-Type": "application/json",
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           idServer: fkUsuario,
           fkPergunta: fkPergunta,
           resposta: resposta,
-          isCorreta: isCorreta
+          isCorreta: isCorreta,
         }),
-      }).then(function (resposta) {
-        console.log("resposta: ", resposta);
-
-        if (resposta.ok) {
-          console.log(`Resposta ${index} cadastrada com sucesso`)
-        } else {
-          throw "Houve um erro ao tentar realizar o cadastro!";
-        }
       })
-      .catch(function (resposta) {
-        console.log(`#ERRO: ${resposta}`);
-      });
+        .then(function (resposta) {
+          console.log("resposta: ", resposta);
+
+          if (resposta.ok) {
+            console.log(`Resposta ${index} cadastrada com sucesso`);
+          } else {
+            throw "Houve um erro ao tentar realizar o cadastro!";
+          }
+        })
+        .catch(function (resposta) {
+          console.log(`#ERRO: ${resposta}`);
+        });
     }
-    ;
+    mostrarAcertosEErros();
   }
   var listaRespostasCertas = [];
   function listarRespostas() {
@@ -366,7 +381,6 @@
             console.log("SELECT FEITO");
             throw "Nenhum resultado encontrado";
           }
-
           resposta.json().then(function (resposta) {
             console.log("Dados recebidos: ", JSON.stringify(resposta));
             for (var index = 0; index < resposta.length; index++) {
@@ -381,60 +395,45 @@
         console.error(resposta);
       });
   }
-  var listaInserirNoBanco = [{idPergunta:"",
-      resposta: "",
-      isCorreta: "",
-    },{idPergunta:"",
-      resposta: "",
-      isCorreta: "",
-    },{idPergunta:"",
-      resposta: "",
-      isCorreta: "",
-    },{idPergunta:"",
-      resposta: "",
-      isCorreta: "",
-    },{idPergunta:"",
-      resposta: "",
-      isCorreta: "",
-    },{idPergunta:"",
-      resposta: "",
-      isCorreta: "",
-    },{idPergunta:"",
-      resposta: "",
-      isCorreta: "",
-    },{idPergunta:"",
-      resposta: "",
-      isCorreta: "",
-    },{idPergunta:"",
-      resposta: "",
-      isCorreta: "",
-    },{idPergunta:"",
-      resposta: "",
-      isCorreta: "",
-    },
-  ]
-  function organizaErrosAcertos(){
-   for (let index = 0; index < listaInserirNoBanco; index++) {
-    listaInserirNoBanco[index].idPergunta = listaPerguntas.id[index];
-    listaInserirNoBanco[index].resposta = listaRespostas[index];
-    listaInserirNoBanco[index].isCorreta = listaIsCorreta[index];
-   } 
+  var listaInserirNoBanco = [
+    { idPergunta: "", resposta: "", isCorreta: "" },
+    { idPergunta: "", resposta: "", isCorreta: "" },
+    { idPergunta: "", resposta: "", isCorreta: "" },
+    { idPergunta: "", resposta: "", isCorreta: "" },
+    { idPergunta: "", resposta: "", isCorreta: "" },
+    { idPergunta: "", resposta: "", isCorreta: "" },
+    { idPergunta: "", resposta: "", isCorreta: "" },
+    { idPergunta: "", resposta: "", isCorreta: "" },
+    { idPergunta: "", resposta: "", isCorreta: "" },
+    { idPergunta: "", resposta: "", isCorreta: "" },
+  ];
+  function organizaErrosAcertos() {
+    for (let index = 0; index < listaInserirNoBanco; index++) {
+      listaInserirNoBanco[index].idPergunta = listaPerguntas.id[index];
+      listaInserirNoBanco[index].resposta = listaRespostas[index];
+      listaInserirNoBanco[index].isCorreta = listaIsCorreta[index];
+    }
   }
 
-  function mostrarAcertosEErros(){
+  function mostrarAcertosEErros() {
+    var mensagem = "";
     for (var index = 0; index < listaRespostas.length; index++) {
-      mensagem += `Pergunta: ${listaPerguntas[index].id} <br>
-      Resposta: ${listaRespostas[index]}<br>
-      Resposta Correta: ${listaPerguntas[index].alternativaCorreta} <br>
-      `
-      if (listaIsCorreta[index] == 'A') {
-        mensagem += `Parabéns! Voce acertou`
-      } else{
-        mensagem += `Você errou! Quem sabe da próxima`
+      if (listaIsCorreta[index] == "S") {
+        mensagem += `<div class="item_resultado">Pergunta: <span style="color:green">${listaPerguntas[index].id}</span> <br>
+      Resposta: <span style="color:green">${listaRespostas[index]}</span><br>
+      Resposta Correta: <span style="color:green">${listaPerguntas[index].alternativaCorreta}</span><br>
+      </div>
+      `;
+      } else {
+        mensagem += `<div class="item_resultado">Pergunta: <span style="color:red">${listaPerguntas[index].id}</span> <br>
+      Resposta: <span style="color:red">${listaRespostas[index]}</span><br>
+      Resposta Correta: <span style="color:red">${listaPerguntas[index].alternativaCorreta}</span><br>
+      </div>
+      `;
       }
     }
-    section_quest.innerHTML = `<h1>Sua pontuação</h1> <br> <h2> ${qtdAcertos}/10 </h2> <br>
-    <span>Você acertou as questões: ${listaDeAcertos} <div>${mensagem}</div></span>
-    `
+    section_quest.innerHTML = `<span><h2>Sua pontuação</h2>
+      <h3>Você acertou: ${qtdAcertos}/10</h2></span><br><div class="resultado">${mensagem}</div>
+    `;
   }
 </script>
