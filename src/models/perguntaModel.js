@@ -9,6 +9,8 @@ function listarRespostas(fkUsuario) {
   var instrucaoSql = `SELECT resposta, isCorreta FROM resposta WHERE fkUsuario = ${fkUsuario}`;
   return database.executar(instrucaoSql);
 }
+
+  
 module.exports = {
   cadastrar,
   listarRespostas

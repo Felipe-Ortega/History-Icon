@@ -320,6 +320,10 @@
     bt2.setAttribute("value", listaPerguntas[indiceQuestao].alternativaB);
     bt3.setAttribute("value", listaPerguntas[indiceQuestao].alternativaC);
     bt4.setAttribute("value", listaPerguntas[indiceQuestao].alternativaD);
+    for (let index = 0; index < listaBotoes.length; index++) {
+      listaBotoes[index].classList.remove("div_button_pressed");
+      listaBotoes[index].classList.add("none");
+    }
   }
   var listaDeAcertos = [];
   var listaIsCorreta = [];

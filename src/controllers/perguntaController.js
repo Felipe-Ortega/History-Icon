@@ -42,7 +42,25 @@ function listarRespostas(req, res) {
     });
 }
 
+function cadastrarLog(req, res) {
+  var fkPergunta = req.body.idPergunta;
+  var dtHora = req.body.dtServer;
+  usuarioModel
+    .cadastrarLog(fkPergunta, dtHora)
+    .then(function (resultado) {
+      res.json(resultado);
+    })
+    .catch(function (erro) {
+      console.log(erro);
+      console.log(
+        "\nHouve um erro ao realizar o cadastro! Erro: ",
+        erro.sqlMessage
+      );
+      res.status(500).json(erro.sqlMessage);
+    });
+}
 module.exports = {
   cadastrar,
   listarRespostas,
+  cadastrarLog
 };
