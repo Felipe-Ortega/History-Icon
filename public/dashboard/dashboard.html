@@ -1,63 +1,79 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-  <head>
-    <link
-      rel="shortcut icon"
-      href="../assets/icon/favicon2.ico"
-      type="image/x-icon"
-    />
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AquaTech | Dashboards</title>
 
-    <link rel="stylesheet" href="./../css/dashboards.css" />
-    <link rel="stylesheet" href="./../css/estilo.css" />
-    <script src="../js/sessao.js"></script>
-    <script src="./../js/alerta.js"></script>
+<head>
+  <link rel="shortcut icon" href="../assets/icon/favicon2.ico" type="image/x-icon" />
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AquaTech | Dashboards</title>
 
-    <link rel="preconnect" href="https://fonts.gstatic.com" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-      rel="stylesheet"
-    />
+  <link rel="stylesheet" href="../css/style_pergunta.css" />
+  <script src="../js/sessao.js"></script>
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    rel="stylesheet" />
 
-    <!-- scripts do Chart.js - 2022-1 -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- scripts do Chart.js - 2022-1 -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <!--FONT AWESOME-->
-    <script
-      src="https://kit.fontawesome.com/9f7414eb10.js"
-      crossorigin="anonymous"
-    ></script>
-  </head>
+  <!--FONT AWESOME-->
+  <script src="https://kit.fontawesome.com/9f7414eb10.js" crossorigin="anonymous"></script>
+</head>
 
-  <body>
-    <button onclick="listarRespostasErradasCorretasPorUsuario(correta)">
-      Listar qtdCorreta usuario
-    </button>
-    <button onclick="listarRespostasErradasCorretasPorUsuario(errada)">
-      Listar qtdErrada usuario
-    </button>
-    <button onclick="listarRespostasPorUsuario()">
-      Listar qtdTotal usuario
-    </button>
-    <button onclick="listarRespostasCorretasErradas(correta)">
-      Listar qtdCorreta total
-    </button>
-    <button onclick="listarRespostasCorretasErradas(errada)">
-      Listar qtderrada total
-    </button>
-    <button onclick="listarRespostas()">Listar qtdtotal</button>
-  </body>
+<body onload="validarSessao()">
+  <div class="container_all">
+    <div class="container_menu">
+      <div class="menu_top">
+        <div class="div_well_come">
+          <h2>Bem vindo, <span id="b_usuario"></span></h2>
+        </div>
+        <ul>
+          <li></li>
+          <li>
+            <a href="pergunta.html"><button>Pergunta</button></a>
+          </li>
+          <li>
+            <a href="atualizarCadastro.html"><button>Atualizar cadastro</button></a>
+          </li>
+          <li>
+            <a href="dashboard.html"><button>Dashboard</button></a>
+          </li>
+        </ul>
+      </div>
+      <button class="btn_sair" onclick="limparSessao()">Sair</button>
+    </div>
+    <div class="container_quest">
+      <div class="container_kpi">
+        <div class="kpi">
+          <h2>Seus acertos</h2>
+          <h2 id="acertos_usuario"></h2>
+        </div>
+        <div class="kpi">
+          <h2>Perguntas Respondidas</h2>
+          <h2 id="perguntas_usuario"></h2>
+        </div>
+        <div class="kpi">
+          <h2>Acertos global</h2>
+          <h2 id="acerto_global"></h2>
+        </div>
+        <div class="kpi">
+
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
 </html>
 
 <script>
   var correta = "S";
   var errada = "N";
-  var qtdTotalRespCorretas= 0;
-  var qtdTotalRespErradas= 0;
-  var totalRespostas= 0
+  var qtdTotalRespCorretas = 0;
+  var qtdTotalRespErradas = 0;
+  var totalRespostas = 0
   var qtdRespCorretasUsu = 0;
   var qtdRespErradasUsu = 0;
   var totalRespostasUsu = 0;
@@ -99,7 +115,7 @@
   }
 
   function listarRespostasCorretasErradas(isCorreta) {
-    
+
     fetch(`/resposta/listarRespostasTotal/${isCorreta}`, {
       method: "GET",
     })
@@ -107,9 +123,9 @@
         res.json().then((json) => {
           console.log(json);
           if (isCorreta == "S") {
-            qtdTotalRespCorretas= json.correta;
+            qtdTotalRespCorretas = json.correta;
           } else {
-            qtdTotalRespErradas= json.correta;
+            qtdTotalRespErradas = json.correta;
           }
         });
       })
@@ -124,20 +140,27 @@
       .then((res) => {
         res.json().then((json) => {
           console.log(json);
-          totalRespostas= json[0].corretas;
+          totalRespostas = json[0].corretas;
         });
       })
       .catch((err) => {
         console.log(err);
       });
   }
-
-  function calcularPorcentagemAcertosUsuario(){
-    var porcentagemAcertos = (qtdTotalRespCorretas/ totalRespostasUsu) * 100;
+  var porcentagemAcertos = 0;
+  function calcularPorcentagemAcertosUsuario() {
+    porcentagemAcertos = (qtdTotalRespCorretas / totalRespostasUsu) * 100;
     console.log(`Porcentagem acertos usu: ${porcentagemAcertosU}`)
-    return porcentagemAcertos
+    acertos_usuario.innerHTML = porcentagemAcertos;
   }
-  function calcularPorcentagemAcertosTotal(){
-    var porcentagemAcertosTotal = (qtdTotalRespCorretas / totalRespostas) * 1
+  var porcentagemAcertosTotal = 0;
+  function calcularPorcentagemAcertosTotal() {
+    porcentagemAcertosTotal = (qtdTotalRespCorretas / totalRespostas) * 100;
+    acerto_global.innerHTML = porcentagemAcertosTotal;
   }
+
+  function mostrarQuantidadePerguntasRespondidas(){
+    perguntas_usuario.innerHTML
+  }
+
 </script>

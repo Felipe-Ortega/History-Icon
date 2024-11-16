@@ -27,8 +27,8 @@ CREATE TABLE Resposta (
     fkPergunta INT,
     resposta VARCHAR(45),
     isCorreta CHAR(1),
-    CONSTRAINT fkUsuarioResposta foreign key (fkUsuario) references usuario(idUsuario),
-    CONSTRAINT fkPerguntaResposta foreign key (fkPergunta) references pergunta(idPergunta),
+    CONSTRAINT fkUsuarioResposta foreign key (fkUsuario) references Usuario(idUsuario),
+    CONSTRAINT fkPerguntaResposta foreign key (fkPergunta) references Pergunta(idPergunta),
     CONSTRAINT pkResposta primary key (idResposta, fkUsuario, fkPergunta)
 );
 
@@ -44,7 +44,7 @@ INSERT INTO Pergunta VALUES
 (DEFAULT, "Quem criou a tabela periódica atual?", "Dmitri Mendeleiev"),
 (DEFAULT, "Quem foi a primeira pessoa a escrever um algoritmo?", "Ada Lovelace");
 
-select * from usuario;
-select * from resposta;
+select * from Usuario;
+select * from Resposta;
 
 SELECT COUNT(isCorreta) FROM resposta WHERE isCorreta = 'S';
