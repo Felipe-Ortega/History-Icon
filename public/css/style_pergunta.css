@@ -184,11 +184,47 @@ a {
   display: flex;
   width: 100%;
   height: 100%;
-  gap: 10px 10%;
-  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
+
+
 .kpi{
+  display: flex;
+  flex-direction: column;
   background-color: #d9d9d9;
-  height: 20%;
-  width: 20%;
+  height: 80%;
+  width: 30%;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+}
+.perg_resp{
+  padding-inline: 6vw;
+
+
+}
+.acert_global{
+  padding-inline: 6vw;
+}
+.kpis_usu{
+  display: flex;
+  width: 100%;
+  height: 30%;
+  justify-content: space-around;
+}
+
+.kpis_global{
+  display: flex;
+  width: 100%;
+  height: 30%;
+  justify-content: space-around;
+}
+
+.ranking{
+  height: 30%;
+  width: 88%;
+  background-color: #d9d9d9;
+
 }

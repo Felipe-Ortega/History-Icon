@@ -22,7 +22,7 @@ function listarRespostasCorretasErrada(isCorreta){
 
 // Listar quantidade de respostas de todos os usuarios
 function listarRespostas(){
-  var instrucaoSql = `SELECT COUNT(isCorreta) as corretas FROM resposta;`
+  var instrucaoSql = `SELECT COUNT(isCorreta) as corretas FROM Resposta;`
   return database.executar(instrucaoSql);
 }
 module.exports = {

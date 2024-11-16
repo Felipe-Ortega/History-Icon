@@ -22,7 +22,7 @@
   <script src="https://kit.fontawesome.com/9f7414eb10.js" crossorigin="anonymous"></script>
 </head>
 
-<body onload="validarSessao()">
+<body onload="validarSessao();gerarDashboard()">
   <div class="container_all">
     <div class="container_menu">
       <div class="menu_top">
@@ -46,20 +46,29 @@
     </div>
     <div class="container_quest">
       <div class="container_kpi">
-        <div class="kpi">
-          <h2>Seus acertos</h2>
-          <h2 id="acertos_usuario"></h2>
+        <div class="kpis_usu">
+          <div class="kpi">
+            <h2>Seus acertos</h2>
+            <h2 id="acertos_usuario"></h2>
+          </div>
+          <div class="kpi perg_resp">
+            <h2>Perguntas Respondidas</h2>
+            <h2 id="perguntas_usuario"></h2>
+          </div>
         </div>
-        <div class="kpi">
-          <h2>Perguntas Respondidas</h2>
-          <h2 id="perguntas_usuario"></h2>
+        <div class="kpis_global">
+          <div class="kpi">
+            <h2>Você está</h2>
+            <h2 id="acima_usuario"></h2>
+            <h2 id="desempenho_usuario_vs_global"></h2>
+          </div>
+          <div class="kpi acert_global">
+            <h2>Acertos global</h2>
+            <h2 id="acerto_global"></h2>
+          </div>
         </div>
-        <div class="kpi">
-          <h2>Acertos global</h2>
-          <h2 id="acerto_global"></h2>
-        </div>
-        <div class="kpi">
-
+        <div class="ranking kpi">
+          <h1>Ranking</h1>
         </div>
       </div>
     </div>
@@ -87,9 +96,11 @@
         res.json().then((json) => {
           console.log(json);
           if (isCorreta == "S") {
-            qtdRespCorretasUsu = json.correta
+            console.log(json[0].corretas)
+            qtdRespCorretasUsu = json[0].corretas
           } else {
-            qtdRespErradasUsu = json.correta
+            console.log(json[0].corretas)
+            qtdRespErradasUsu = json[0].corretas
           }
         });
       })
@@ -105,8 +116,11 @@
     })
       .then((res) => {
         res.json().then((json) => {
-          console.log(json);
-          totalRespostasUsu = json.correta
+          console.log(json[0].corretas)
+          totalRespostasUsu = json[0].corretas
+          setTimeout(() => {
+            perguntas_usuario.innerHTML = totalRespostasUsu
+          }, 200);
         });
       })
       .catch((err) => {
@@ -123,9 +137,13 @@
         res.json().then((json) => {
           console.log(json);
           if (isCorreta == "S") {
-            qtdTotalRespCorretas = json.correta;
+            console.log(json[0].corretas)
+
+            qtdTotalRespCorretas = json[0].corretas;
           } else {
-            qtdTotalRespErradas = json.correta;
+            console.log(json[0].corretas)
+
+            qtdTotalRespErradas = json[0].corretas
           }
         });
       })
@@ -140,6 +158,7 @@
       .then((res) => {
         res.json().then((json) => {
           console.log(json);
+          console.log(json[0].corretas)
           totalRespostas = json[0].corretas;
         });
       })
@@ -148,19 +167,48 @@
       });
   }
   var porcentagemAcertos = 0;
+
   function calcularPorcentagemAcertosUsuario() {
-    porcentagemAcertos = (qtdTotalRespCorretas / totalRespostasUsu) * 100;
-    console.log(`Porcentagem acertos usu: ${porcentagemAcertosU}`)
-    acertos_usuario.innerHTML = porcentagemAcertos;
-  }
-  var porcentagemAcertosTotal = 0;
-  function calcularPorcentagemAcertosTotal() {
-    porcentagemAcertosTotal = (qtdTotalRespCorretas / totalRespostas) * 100;
-    acerto_global.innerHTML = porcentagemAcertosTotal;
+    porcentagemAcertos = (qtdRespCorretasUsu / totalRespostasUsu * 100);
+    console.log(`Porcentagem acertos usu: ${porcentagemAcertos}`)
+    acertos_usuario.innerHTML = `${porcentagemAcertos.toFixed(0)}%`;
   }
 
-  function mostrarQuantidadePerguntasRespondidas(){
+  var porcentagemAcertosTotal = 0;
+
+  function calcularPorcentagemAcertosTotal() {
+
+    porcentagemAcertosTotal = (qtdTotalRespCorretas / totalRespostas * 100);
+    console.log(`Porcentagem acertos global: ${porcentagemAcertosTotal}`)
+    acerto_global.innerHTML = `${porcentagemAcertosTotal.toFixed(0)}%`;
+  }
+
+  function mostrarQuantidadePerguntasRespondidas() {
     perguntas_usuario.innerHTML
   }
 
+  function verificarDesempenhoUsuarioVsGlobal() {
+    var desempenho_usuario = (((porcentagemAcertos - porcentagemAcertosTotal) / ((porcentagemAcertos + porcentagemAcertosTotal) / 2)) * 100)
+    acima_usuario.innerHTML = `${(desempenho_usuario).toFixed(0)}%`
+    if (porcentagemAcertos > porcentagemAcertosTotal) {
+      desempenho_usuario_vs_global.innerHTML = `Acima da média`
+    } else{
+      desempenho_usuario_vs_global.innerHTML = `Abaixo da média`
+    }
+  }
+  function gerarDashboard() {
+    listarRespostasErradasCorretasPorUsuario('S')
+    listarRespostasErradasCorretasPorUsuario('N')
+    listarRespostasPorUsuario()
+    listarRespostasCorretasErradas('S')
+    listarRespostasCorretasErradas('N')
+    listarRespostas()
+    setTimeout(() => {
+      calcularPorcentagemAcertosUsuario()
+      calcularPorcentagemAcertosTotal()
+      mostrarQuantidadePerguntasRespondidas()
+      verificarDesempenhoUsuarioVsGlobal()
+
+    }, 200);
+  }
 </script>
