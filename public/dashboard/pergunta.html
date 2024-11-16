@@ -157,7 +157,7 @@
       alternativaA: "5 minutos",
       alternativaB: "7 minutos",
       alternativaC: "8,5 minutos",
-      alternativaD: "12,5",
+      alternativaD: "12,5 minutos",
       alternativaCorreta: "8,5 minutos",
     },
     {
@@ -327,6 +327,7 @@
   }
   var listaDeAcertos = [];
   var listaIsCorreta = [];
+  
   function verificaPontuacao() {
     listaDeAcertos = [];
     for (var index = 0; index < listaRespostas.length; index++) {
@@ -349,7 +350,7 @@
       var fkPergunta = listaPerguntas[index].id;
       var resposta = listaRespostas[index];
       var isCorreta = listaIsCorreta[index];
-      fetch("/pergunta/cadastrar", {
+      fetch("/resposta/cadastrar", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -377,28 +378,6 @@
     mostrarAcertosEErros();
   }
   var listaRespostasCertas = [];
-  function listarRespostas() {
-    fetch("/pergunta/listar")
-      .then(function (resposta) {
-        if (resposta.ok) {
-          if (resposta.status == 204) {
-            console.log("SELECT FEITO");
-            throw "Nenhum resultado encontrado";
-          }
-          resposta.json().then(function (resposta) {
-            console.log("Dados recebidos: ", JSON.stringify(resposta));
-            for (var index = 0; index < resposta.length; index++) {
-              listaRespostasCertas.push(resposta[index]);
-            }
-          });
-        } else {
-          throw "Houve um erro na API!";
-        }
-      })
-      .catch(function (resposta) {
-        console.error(resposta);
-      });
-  }
   var listaInserirNoBanco = [
     { idPergunta: "", resposta: "", isCorreta: "" },
     { idPergunta: "", resposta: "", isCorreta: "" },
@@ -418,7 +397,9 @@
       listaInserirNoBanco[index].isCorreta = listaIsCorreta[index];
     }
   }
-
+  function refazer(){
+    window.location.reload()
+  }
   function mostrarAcertosEErros() {
     var mensagem = "";
     for (var index = 0; index < listaRespostas.length; index++) {
@@ -437,7 +418,9 @@
       }
     }
     section_quest.innerHTML = `<span><h2>Sua pontuação</h2>
-      <h3>Você acertou: ${qtdAcertos}/10</h2></span><br><div class="resultado">${mensagem}</div>
+      <h3>Você acertou: ${qtdAcertos}/10</h2></span><br><div class="resultado">${mensagem}<br>
+        <button class="NextBackButton" id="btn_back" onclick="refazer()">Refazer</button>
+        </div>
     `;
   }
 </script>
