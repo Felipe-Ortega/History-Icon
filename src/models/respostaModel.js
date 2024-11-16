@@ -25,10 +25,31 @@ function listarRespostas(){
   var instrucaoSql = `SELECT COUNT(isCorreta) as corretas FROM Resposta;`
   return database.executar(instrucaoSql);
 }
+
+function listarRankingRespostas(){
+  var instrucaoSql = `SELECT
+    nome,
+    (
+        SUM(
+            CASE
+                WHEN isCorreta = 'S' THEN 1
+                ELSE 0
+            END
+        ) / COUNT(isCorreta)
+    ) * 100 AS aproveitamento
+FROM Resposta
+    JOIN Usuario ON Resposta.fkUsuario = Usuario.idUsuario
+GROUP BY
+    nome
+ORDER BY aproveitamento DESC;`
+ return database.executar(instrucaoSql);
+}
+
 module.exports = {
   cadastrar,
   listarRespostasCorretasErradasPorUsuario,
   listarRespostasPorUsuario,
   listarRespostasCorretasErrada,
-  listarRespostas
+  listarRespostas,
+  listarRankingRespostas
 };

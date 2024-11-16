@@ -67,11 +67,18 @@ function listarRespostas(req,res){
     res.status(200).json(resultado)
   }))
 }
+
+function listarRankingRespostas(req,res){
+  respostaModel.listarRankingRespostas(req,res).then((resultado => {
+    res.status(200).json(resultado)
+  }))
+}
 module.exports = {
   cadastrar,
   listarRespostasCorretasErradasPorUsuario,
   listarRespostasPorUsuario,
   listarRespostasCorretasErrada,
   listarRespostas,
-  cadastrarLog
+  cadastrarLog,
+  listarRankingRespostas
 };

@@ -21,6 +21,7 @@
   <!--FONT AWESOME-->
   <script src="https://kit.fontawesome.com/9f7414eb10.js" crossorigin="anonymous"></script>
 </head>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <body onload="validarSessao();gerarDashboard()">
   <div class="container_all">
@@ -69,6 +70,9 @@
         </div>
         <div class="ranking kpi">
           <h1>Ranking</h1>
+          <div class="chart">
+            <canvas id="myChart"></canvas>
+          </div>
         </div>
       </div>
     </div>
@@ -166,18 +170,54 @@
         console.log(err);
       });
   }
+  var listaQuantidadeDeUsuarioRanking = [];
+  var listaQuantidadeRespostasRanking = [];
+  var listaQuantidadeRespostasCorretasRanking = []
+  var listaNomeUsuarioRanking = [];
+//   function listarRankingCorretas() {
+//     fetch(`/resposta/listarRankingCorretas`, {
+//       method: "GET",
+//     })
+//       .then((res) => {
+//         res.json().then((json) => {
+//           console.log(`Teste ranking: ${json}`)
+//           for (var i = 0; i < json.length; i++) {
+//           }
+//         });
+//       })
+//       .catch((err) => {
+//         console.log(err)
+//       })
+// }
+  var listaAproveitamentoUsuario = []
+  var totalRespostas = []
+  function listarRankingRespostas(){
+    fetch(`/resposta/listarRankingRespostas`,{
+      method: "GET"
+    }).then((res) => {
+      res.json().then((json) =>{
+        console.log(`Ranking Respostas: ${json}`)
+        for (var i = json.length-1; i >= 0; i--) {
+          console.log(json[i].aproveitamento)
+          console.log(json[i].nome)
+            listaAproveitamentoUsuario.push(json[i].aproveitamento)
+            listaNomeUsuarioRanking.push(json[i].nome)
+        }
+      });
+    }).catch((err) => {
+      console.log(err)
+    })
+  }
   var porcentagemAcertos = 0;
 
   function calcularPorcentagemAcertosUsuario() {
     porcentagemAcertos = (qtdRespCorretasUsu / totalRespostasUsu * 100);
-    console.log(`Porcentagem acertos usu: ${porcentagemAcertos}`)
+    console.log(`Porcentagem acertos usuario logado: ${porcentagemAcertos}`)
     acertos_usuario.innerHTML = `${porcentagemAcertos.toFixed(0)}%`;
   }
-
   var porcentagemAcertosTotal = 0;
 
   function calcularPorcentagemAcertosTotal() {
-
     porcentagemAcertosTotal = (qtdTotalRespCorretas / totalRespostas * 100);
     console.log(`Porcentagem acertos global: ${porcentagemAcertosTotal}`)
     acerto_global.innerHTML = `${porcentagemAcertosTotal.toFixed(0)}%`;
@@ -190,9 +230,12 @@
   function verificarDesempenhoUsuarioVsGlobal() {
     var desempenho_usuario = (((porcentagemAcertos - porcentagemAcertosTotal) / ((porcentagemAcertos + porcentagemAcertosTotal) / 2)) * 100)
     acima_usuario.innerHTML = `${(desempenho_usuario).toFixed(0)}%`
+    var usuario = document.getElementById('acima_usuario')
     if (porcentagemAcertos > porcentagemAcertosTotal) {
+      usuario.style.color = 'green'
       desempenho_usuario_vs_global.innerHTML = `Acima da média`
-    } else{
+    } else {
+      usuario.style.color = 'red'
       desempenho_usuario_vs_global.innerHTML = `Abaixo da média`
     }
   }
@@ -203,12 +246,34 @@
     listarRespostasCorretasErradas('S')
     listarRespostasCorretasErradas('N')
     listarRespostas()
+    listarRankingRespostas()
     setTimeout(() => {
       calcularPorcentagemAcertosUsuario()
       calcularPorcentagemAcertosTotal()
       mostrarQuantidadePerguntasRespondidas()
       verificarDesempenhoUsuarioVsGlobal()
-
+      const ctx = document.getElementById("myChart");
+  new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: listaNomeUsuarioRanking,
+      datasets: [{
+        label: "Aproveitamento",
+        data: listaAproveitamentoUsuario,
+          borderWidth: 2,
+          borderColor: "#4444ff",
+          backgroundColor: "#4444ff",
+      }],
+    },
+    option: {
+      scales: {
+        y: {
+          beginAtZero: true,
+        },
+      },
+    },
+  });
     }, 200);
   }
+  
 </script>

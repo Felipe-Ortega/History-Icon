@@ -26,4 +26,12 @@ router.get("/listarRespostasTotal/:isCorreta", function (req,res){
 router.get("/listarRespostas", function (req,res){
     respostaController.listarRespostas(req,res)
 })
+
+router.get("/listarRankingCorretas", function(req,res){
+    respostaController.listarRankingCorretas(req,res)
+})
+
+router.get("/listarRankingRespostas", function(req,res){
+    respostaController.listarRankingRespostas(req,res)
+})
 module.exports = router;
