@@ -1,4 +1,4 @@
-  var respostaModel = require("../models/respostaModel");
+var respostaModel = require("../models/respostaModel");
 
 function cadastrar(req, res) {
   fkUsuario = req.body.idServer;
@@ -32,7 +32,7 @@ function listarRespostasCorretasErradasPorUsuario(req, res) {
     res.status(200).json(resultado)
   })
 }
-function listarRespostasPorUsuario(req, res){
+function listarRespostasPorUsuario(req, res) {
   fkUsuario = req.params.idUsuario
   respostaModel.listarRespostasPorUsuario(fkUsuario).then((resultado) => {
     res.status(200).json(resultado)
@@ -55,21 +55,21 @@ function cadastrarLog(req, res) {
       res.status(500).json(erro.sqlMessage);
     });
 }
-function listarRespostasCorretasErrada(req,res) {
+function listarRespostasCorretasErrada(req, res) {
   var isCorreta = req.params.isCorreta;
   respostaModel.listarRespostasCorretasErrada(isCorreta).then((resultado) => {
     res.status(200).json(resultado)
   })
 }
 
-function listarRespostas(req,res){
-  respostaModel.listarRespostas(req,res).then((resultado => {
+function listarRespostas(req, res) {
+  respostaModel.listarRespostas(req, res).then((resultado => {
     res.status(200).json(resultado)
   }))
 }
 
-function listarRankingRespostas(req,res){
-  respostaModel.listarRankingRespostas(req,res).then((resultado => {
+function listarRankingRespostas(req, res) {
+  respostaModel.listarRankingRespostas(req, res).then((resultado => {
     res.status(200).json(resultado)
   }))
 }

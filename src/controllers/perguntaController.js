@@ -1,5 +1,9 @@
 var perguntaModel = require("../models/perguntaModel");
-
+function listarAleatorio(req,res){
+  perguntaModel.listarAleatorio().then((resultado) => {
+    res.status(200).json(resultado)
+  })
+}
 function cadastrar(req, res) {
   (op1 = req.body.op1Server),
     (op2 = req.body.op2Server),

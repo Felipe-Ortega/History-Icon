@@ -12,7 +12,7 @@
     <script src="../js/sessao.js"></script>
     <script src="../js/alerta.js"></script>
   </head>
-  <body onload="validarSessao()">
+  <body onload="validarSessao() ;listarAleatorio()">
     <div class="container_all">
       <div class="container_menu">
         <div class="menu_top">
@@ -106,120 +106,139 @@
   
   var listaPerguntas = [
     {
-      id: 1,
-      pergunta: "Quem criou a teoria da relatividade?",
-      alternativaA: "Isaac Newton",
-      alternativaB: "Max Planck",
-      alternativaC: "James Maxwell",
-      alternativaD: "Albert Einsten",
-      alternativaCorreta: "Albert Einsten",
+      id: null,
+      pergunta: "",
+      alternativaA: "",
+      alternativaB: "",
+      alternativaC: "",
+      alternativaD: "",
+      alternativaCorreta: "",
     },
     {
-      id: 2,
-      pergunta: "Qual o nome do guerreiro que inspirou a maratona?",
-      alternativaA: "Fidípides",
-      alternativaB: "Leônidas",
-      alternativaC: "Lisandro",
-      alternativaD: "Brásidas",
-      alternativaCorreta: "Fidípides",
+      id: null,
+      pergunta: "",
+      alternativaA: "",
+      alternativaB: "",
+      alternativaC: "",
+      alternativaD: "",
+      alternativaCorreta: "",
     },
     {
-      id: 3,
-      pergunta:
-        "Quem foi o matemático a chegar mais próximo de PI na idade antiga?",
-      alternativaA: "Pitágoras",
-      alternativaB: "Aristóteles",
-      alternativaC: "Arquemedes",
-      alternativaD: "Euclides",
-      alternativaCorreta: "Arquemedes",
+      id: null,
+      pergunta: "",
+      alternativaA: "",
+      alternativaB: "",
+      alternativaC: "",
+      alternativaD: "",
+      alternativaCorreta: "",
     },
     {
-      id: 4,
-      pergunta: "Qual a velocidade da luz no vácuo?",
-      alternativaA: "300.000.000 m/s",
-      alternativaB: "300.000.000 km/h",
-      alternativaC: "1.200.000 m/s",
-      alternativaD: "1.200.000 km/s",
-      alternativaCorreta: "300.000.000 m/s",
+      id: null,
+      pergunta: "",
+      alternativaA: "",
+      alternativaB: "",
+      alternativaC: "",
+      alternativaD: "",
+      alternativaCorreta: "",
     },
     {
-      id: 5,
-      pergunta:
-        "Quem foi o primeiro astrônomo a dizer que a Terra gira em torno do Sol?",
-      alternativaA: "Johannes Kepler",
-      alternativaB: "Galileu Galilei",
-      alternativaC: "Nicolau Copérnico",
-      alternativaD: "Cristóvão Colombo",
-      alternativaCorreta: "Nicolau Copérnico",
+      id: null,
+      pergunta: "",
+      alternativaA: "",
+      alternativaB: "",
+      alternativaC: "",
+      alternativaD: "",
+      alternativaCorreta: "",
     },
     {
-      id: 6,
-      pergunta:
-        "Caso o Sol suma repentinamente, quanto tempo demoraria para perceber-mos?",
-      alternativaA: "5 minutos",
-      alternativaB: "7 minutos",
-      alternativaC: "8,5 minutos",
-      alternativaD: "12,5 minutos",
-      alternativaCorreta: "8,5 minutos",
+      id: null,
+      pergunta: "",
+      alternativaA: "",
+      alternativaB: "",
+      alternativaC: "",
+      alternativaD: "",
+      alternativaCorreta: "",
     },
     {
-      id: 7,
-      pergunta:
-        "Quem originou a ideia de que 2 corpos não ocupam o mesmo espaço?",
-      alternativaA: "Huygens",
-      alternativaB: "Isaac Newton",
-      alternativaC: "Carl Sagan",
-      alternativaD: "Euler",
-      alternativaCorreta: "Isaac Newton",
+      id: null,
+      pergunta: "",
+      alternativaA: "",
+      alternativaB: "",
+      alternativaC: "",
+      alternativaD: "",
+      alternativaCorreta: "",
     },
     {
-      id: 8,
-      pergunta: "Quem é o pai da filosofia?",
-      alternativaA: "Tales de Mileto",
-      alternativaB: "Sócrates",
-      alternativaC: "Platão",
-      alternativaD: "Marcos Aurélio",
-      alternativaCorreta: "Tales de Mileto",
+      id: null,
+      pergunta: "",
+      alternativaA: "",
+      alternativaB: "",
+      alternativaC: "",
+      alternativaD: "",
+      alternativaCorreta: "",
     },
     {
-      id: 9,
-      pergunta: "Quem criou a tabela periódica atual?",
-      alternativaA: "Antoine Lavoisier",
-      alternativaB: "Dmitri Mendeleiev",
-      alternativaC: "John Dalton",
-      alternativaD: "Rutherford",
-      alternativaCorreta: "Dmitri Mendeleiev",
+      id: null,
+      pergunta: "",
+      alternativaA: "",
+      alternativaB: "",
+      alternativaC: "",
+      alternativaD: "",
+      alternativaCorreta: "",
     },
     {
-      id: 10,
-      pergunta: "Quem foi a primeira pessoa a escrever um algoritmo?",
-      alternativaA: "Bill Gates",
-      alternativaB: "Alan Turing",
-      alternativaC: "Steve Jobs",
-      alternativaD: "Ada Lovelace",
-      alternativaCorreta: "Ada Lovelace",
+      id: null,
+      pergunta: "",
+      alternativaA: "",
+      alternativaB: "",
+      alternativaC: "",
+      alternativaD: "",
+      alternativaCorreta: "",
     },
-  ];
+];
+
+    var validaSelect = false;
+  function listarAleatorio(){
+    fetch("/pergunta/listarAleatorio", {
+      method: "GET",
+    }).then((res => {
+      res.json().then((json) => {
+        console.log(json)
+        for (var i = 0; i < json.length; i++) {
+          listaPerguntas[i].id = json[i].idPergunta,
+          listaPerguntas[i].pergunta = json[i].titulo,
+          listaPerguntas[i].alternativaA = json[i].opt1,
+          listaPerguntas[i].alternativaB = json[i].opt2,
+          listaPerguntas[i].alternativaC = json[i].opt3,
+          listaPerguntas[i].alternativaD = json[i].opt4,
+          listaPerguntas[i].alternativaCorreta = json[i].respostaCorreta
+        }
+      })
+    }))
+  }
   var listaRespostas = [];
   var indiceQuestao = 0;
   var qtdAcertos = 0;
-
-  div_titulo_pergunta.innerHTML = listaPerguntas[indiceQuestao].pergunta;
-  alternativaA.innerHTML = listaPerguntas[indiceQuestao].alternativaA;
-  alternativaB.innerHTML = listaPerguntas[indiceQuestao].alternativaB;
-  alternativaC.innerHTML = listaPerguntas[indiceQuestao].alternativaC;
-  alternativaD.innerHTML = listaPerguntas[indiceQuestao].alternativaD;
-
   const bt = document.getElementById(`opt1`);
   const bt2 = document.getElementById(`opt2`);
   const bt3 = document.getElementById(`opt3`);
   const bt4 = document.getElementById(`opt4`);
   var listaBotoes = [bt, bt2, bt3, bt4];
-
+  setTimeout(() => {
+    div_titulo_pergunta.innerHTML = listaPerguntas[indiceQuestao].pergunta;
+  alternativaA.innerHTML = listaPerguntas[indiceQuestao].alternativaA;
+  alternativaB.innerHTML = listaPerguntas[indiceQuestao].alternativaB;
+  alternativaC.innerHTML = listaPerguntas[indiceQuestao].alternativaC;
+  alternativaD.innerHTML = listaPerguntas[indiceQuestao].alternativaD;
   bt.setAttribute("value", listaPerguntas[indiceQuestao].alternativaA);
   bt2.setAttribute("value", listaPerguntas[indiceQuestao].alternativaB);
   bt3.setAttribute("value", listaPerguntas[indiceQuestao].alternativaC);
   bt4.setAttribute("value", listaPerguntas[indiceQuestao].alternativaD);
+  }, 500);
+
+
+
+ 
   function choseQuestion() {
     //Alterando os valores de acordo com o indice da questão
     div_titulo_pergunta.innerHTML = listaPerguntas[indiceQuestao].pergunta;

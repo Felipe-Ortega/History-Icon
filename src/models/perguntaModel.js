@@ -7,7 +7,8 @@ function cadastrar(titulo, op1, op2, op3, op4, respostaCorreta){
 }
 
 function listarAleatorio(){
-    var instrucaoSql = `SELECT * FROM PerguntaORDER BY RAND() LIMIT 10;`
+    var instrucaoSql = `SELECT 	idPergunta, opt1, opt2, opt3, opt4, titulo, respostaCorreta FROM Pergunta ORDER BY RAND()
+LIMIT 10;`
     return database.executar(instrucaoSql);
 
 }
