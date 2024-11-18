@@ -1,4 +1,4 @@
-var respostaModel = require("../models/respostaModel");
+  var respostaModel = require("../models/respostaModel");
 
 function cadastrar(req, res) {
   fkUsuario = req.body.idServer;

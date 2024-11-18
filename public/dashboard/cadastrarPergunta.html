@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="../css/style_pergunta.css" />
+    <link rel="stylesheet" href="../css/style_login.css" />
+
+    <script
+      src="https://kit.fontawesome.com/39f3be7d68.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="../js/sessao.js"></script>
+    <script src="../js/alerta.js"></script>
+  </head>
+  <body onload="validarSessao()">
+    <div class="container_all">
+      <div class="container_menu">
+        <div class="menu_top">
+          <div class="div_well_come">
+            <h2>Bem vindo, <span id="b_usuario"></span></h2>
+          </div>
+
+          <ul>
+            <li>
+              <a href="pergunta.html"><button>Pergunta</button></a>
+            </li>
+            <li>
+              <a href="atualizarCadastro.html"
+                ><button>Atualizar cadastro</button></a
+              >
+            </li>
+            <li><a href="cadastrarPergunta.html"><button>Cadastrar pergunta</button></a></li>
+            <li>
+              <a href="dashboard.html"><button>Dashboard</button></a>
+            </li>
+          </ul>
+        </div>
+        <button class="btn_sair" onclick="limparSessao()">Sair</button>
+      </div>
+      <div class="container_quest">
+        <div class="section_quest">
+          <h1>Adicionar pergunta</h1>
+          <div class="div_email">
+            <input
+              class="inputs"
+              type="text"
+              id="ipt_titulo"
+              placeholder="Titulo da pergunta"
+            />
+          </div>
+          <div class="div_email">
+            <input
+              class="inputs"
+              type="text"
+              id="ipt_op1"
+              placeholder="Opção A"
+            />
+          </div>
+          <div class="div_email">
+            <input
+              class="inputs"
+              type="text"
+              id="ipt_op2"
+              placeholder="Opção B"
+            />
+          </div>
+          <div class="div_email">
+            <input
+              class="inputs"
+              type="text"
+              id="ipt_op3"
+              placeholder="Opção C"
+            />
+          </div>
+          <div class="div_email">
+            <input
+              class="inputs"
+              type="text"
+              id="ipt_op4"
+              placeholder="Opção D"
+            />
+          </div>
+          <div class="button_att">
+            <select id="slt_opCorreta">
+              <option value="#">
+                Selecione a opção com a resposta correta
+              </option>
+              <option value="opt_op1">Opção A</option>
+              <option value="opt_op2">Opção B</option>
+              <option value="opt_op3">Opção C</option>
+              <option value="opt_op4">Opção D</option>
+            </select>
+          </div>
+          <div id="div_erro"></div>
+          <button onclick="adicionar()" class="btn_att">Adicionar</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  function adicionar() {
+    var titulo = ipt_titulo.value;
+    var op1 = ipt_op1.value;
+    var op2 = ipt_op2.value;
+    var op3 = ipt_op2.value;
+    var op4 = ipt_op2.value;
+    var opCorreta = slt_opCorreta.value;
+    if (
+      titulo == "" ||
+      op1 == "" ||
+      op2 == "" ||
+      op3 == "" ||
+      op4 == "" ||
+      opCorreta == "#"
+    ) {
+      div_erro.innerHTML = `Preencha todos os campos`;
+    } else {
+      div_erro.innerHTML = ``;
+      if (opCorreta == "opt_op1") {
+        opCorreta = op1;
+      } else if (opCorreta == "opt_op2") {
+        opCorreta = op2;
+      } else if ((opCorreta = "opt_op3")) {
+        opCorreta = op3;
+      } else if ((opCorreta = "opt_op4")) {
+        opCorreta = op4;
+      }
+      fetch("/pergunta/cadastrar", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          op1Server: op1,
+          op2Server: op2,
+          op3Server: op3,
+          op4Server: op4,
+          tituloServer: titulo,
+          respostaCorreta: opCorreta,
+        }),
+      }).then(function (resposta) {
+        console.log("resposta: ", resposta);
+        if (resposta.ok) {
+          div_erro.innerHTML = `Pergunta cadastrada com sucesso`;
+        }
+      });
+    }
+  }
+</script>
