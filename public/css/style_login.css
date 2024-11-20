@@ -21,7 +21,7 @@ a{
 .div_login{
     width: 30%;
     height: fit-content;
-    background-color: aliceblue;
+    background-color: #d9d9d9;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -53,7 +53,7 @@ a{
     margin-right: 10%;
   }
 .inputs{
-    background-color: aliceblue;
+    background-color: #d9d9d9;
     height: 3vh;
     width: 100%;
     font-size: 20px;
@@ -77,3 +77,9 @@ a{
     color: aliceblue;
 }
 
+#slt_opCorreta{
+    height: 4vh;
+    width: 72%;
+    background-color: #d9d9d9;
+    border: none  ;
+}

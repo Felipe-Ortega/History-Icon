@@ -3,7 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Cadastro de pergunta | HistoryIcon</title>
+    <link rel="icon" href="../images/logo_history.png" />
     <link rel="stylesheet" href="../css/style_pergunta.css" />
     <link rel="stylesheet" href="../css/style_login.css" />
 
@@ -124,9 +125,9 @@
         opCorreta = op1;
       } else if (opCorreta == "opt_op2") {
         opCorreta = op2;
-      } else if ((opCorreta = "opt_op3")) {
+      } else if ((opCorreta == "opt_op3")) {
         opCorreta = op3;
-      } else if ((opCorreta = "opt_op4")) {
+      } else if ((opCorreta == "opt_op4")) {
         opCorreta = op4;
       }
       fetch("/pergunta/cadastrar", {
@@ -143,7 +144,7 @@
           respostaCorreta: opCorreta,
         }),
       }).then(function (resposta) {
-        console.log("resposta: ", resposta);
+        console.log("resposta Pergunta: ", resposta);
         if (resposta.ok) {
           div_erro.innerHTML = `Pergunta cadastrada com sucesso`;
         }
