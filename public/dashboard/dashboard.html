@@ -104,10 +104,10 @@
           console.log(json);
           if (isCorreta == "S") {
             console.log(json[0].corretas)
-            qtdRespCorretasUsu = json[0].corretas
+            qtdRespCorretasUsu = Number(json[0].corretas)
           } else {
             console.log(json[0].corretas)
-            qtdRespErradasUsu = json[0].corretas
+            qtdRespErradasUsu = Number(json[0].corretas)
           }
         });
       })
@@ -124,7 +124,7 @@
       .then((res) => {
         res.json().then((json) => {
           console.log(json[0].corretas)
-          totalRespostasUsu = json[0].corretas
+          totalRespostasUsu = Number(json[0].corretas)
           setTimeout(() => {
             perguntas_usuario.innerHTML = totalRespostasUsu
           }, 200);
@@ -214,10 +214,7 @@
   var porcentagemAcertos = 0;
 
   function calcularPorcentagemAcertosUsuario() {
-    porcentagemAcertos = (qtdRespCorretasUsu / totalRespostasUsu * 100);
-    if (isNaN(porcentagemAcertos)) {
-      porcentagemAcertos = 0
-    }
+    porcentagemAcertos = Number((qtdRespCorretasUsu / totalRespostasUsu * 100));
     acertos_usuario.innerHTML = `${porcentagemAcertos.toFixed(0)}%`;
   }
   var porcentagemAcertosTotal = 0;
@@ -235,7 +232,15 @@
   }
 
   function verificarDesempenhoUsuarioVsGlobal() {
-    var desempenho_usuario = (((porcentagemAcertos - porcentagemAcertosTotal) / ((porcentagemAcertos + porcentagemAcertosTotal) / 2)) * 100)
+    var menor = 0;
+    if (porcentagemAcertosTotal < porcentagemAcertos) {
+      menor = porcentagemAcertosTotal
+    } else if (porcentagemAcertos > porcentagemAcertosTotal){
+      menor = porcentagemAcertos
+    } else{
+      menor = porcentagemAcertos
+    }
+    var desempenho_usuario = (((porcentagemAcertos - porcentagemAcertosTotal) / menor) * 100)
 
     if (isNaN(desempenho_usuario)) {
       desempenho_usuario = 0
@@ -284,7 +289,7 @@
       },
     },
   });
-    }, 200);
+    }, 400);
   }
   
 </script>

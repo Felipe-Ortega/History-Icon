@@ -13,7 +13,7 @@ function cadastrar(req, res) {
     (respCorreta = req.body.respostaCorreta);
 
   perguntaModel
-    .cadastrar(titulo,op1, op2, op3, op3, respCorreta)
+    .cadastrar(titulo,op1, op2, op3, op4, respCorreta)
     .then(function (resultado) {
       res.json(resultado);
     })

@@ -52,11 +52,13 @@ a {
   font-size: 20px;
   width: 100%;
   padding: 5%;
+  cursor: pointer;
 }
 
 .container_menu button:hover {
   width: 100%;
   background-color: #494949;
+  cursor: pointer;
 }
 .container_quest {
   width: 80%;

@@ -197,7 +197,7 @@
       alternativaCorreta: "",
     },
 ];
-
+    
     var validaSelect = false;
   function listarAleatorio(){
     fetch("/pergunta/listarAleatorio", {
@@ -220,6 +220,7 @@
   var listaRespostas = [];
   var indiceQuestao = 0;
   var qtdAcertos = 0;
+  var listaIndicePergunta = [1,2,3,4,5,6,7,8,9,10]
   const bt = document.getElementById(`opt1`);
   const bt2 = document.getElementById(`opt2`);
   const bt3 = document.getElementById(`opt3`);
@@ -426,13 +427,13 @@
     var mensagem = "";
     for (var index = 0; index < listaRespostas.length; index++) {
       if (listaIsCorreta[index] == "S") {
-        mensagem += `<div class="item_resultado">Pergunta: <span style="color:green">${listaPerguntas[index].id}</span> <br>
+        mensagem += `<div class="item_resultado">Pergunta: <span style="color:green">${listaIndicePergunta[i]}</span> <br>
       Resposta: <span style="color:green">${listaRespostas[index]}</span><br>
       Resposta Correta: <span style="color:green">${listaPerguntas[index].alternativaCorreta}</span><br>
       </div>
       `;
       } else {
-        mensagem += `<div class="item_resultado">Pergunta: <span style="color:red">${listaPerguntas[index].id}</span> <br>
+        mensagem += `<div class="item_resultado">Pergunta: <span style="color:red">${listaIndicePergunta[i]}</span> <br>
       Resposta: <span style="color:red">${listaRespostas[index]}</span><br>
       Resposta Correta: <span style="color:red">${listaPerguntas[index].alternativaCorreta}</span><br>
       </div>

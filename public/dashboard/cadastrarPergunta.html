@@ -107,8 +107,8 @@
     var titulo = ipt_titulo.value;
     var op1 = ipt_op1.value;
     var op2 = ipt_op2.value;
-    var op3 = ipt_op2.value;
-    var op4 = ipt_op2.value;
+    var op3 = ipt_op3.value;
+    var op4 = ipt_op4.value;
     var opCorreta = slt_opCorreta.value;
     if (
       titulo == "" ||
@@ -118,7 +118,7 @@
       op4 == "" ||
       opCorreta == "#"
     ) {
-      div_erro.innerHTML = `Preencha todos os campos`;
+      div_erro.innerHTML = `<span style="color:red">Preencha todos os campos</span>`;
     } else {
       div_erro.innerHTML = ``;
       if (opCorreta == "opt_op1") {
