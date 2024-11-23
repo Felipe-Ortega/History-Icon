@@ -41,6 +41,7 @@
       <div class="container_quest">
         <div class="section_quest" id="section_quest">
           <h1 id="div_titulo_pergunta"></h1>
+          <h2 id="perguntaAtual"></h2>
           <div class="section_buttons">
             <div class="div_button">
               <button
@@ -236,6 +237,7 @@
   bt2.setAttribute("value", listaPerguntas[indiceQuestao].alternativaB);
   bt3.setAttribute("value", listaPerguntas[indiceQuestao].alternativaC);
   bt4.setAttribute("value", listaPerguntas[indiceQuestao].alternativaD);
+  perguntaAtual.innerHTML = `(${indiceQuestao+1}/10)`
   }, 500);
 
 
@@ -248,9 +250,11 @@
     alternativaB.innerHTML = listaPerguntas[indiceQuestao].alternativaB;
     alternativaC.innerHTML = listaPerguntas[indiceQuestao].alternativaC;
     alternativaD.innerHTML = listaPerguntas[indiceQuestao].alternativaD;
+    perguntaAtual.innerHTML = `(${indiceQuestao+1}/10)`
     var buttonBack = document.getElementById("div_back_quest");
     // Verifico o indice da questão para adicionar o botão de voltar questão
     if (indiceQuestao > 0) {
+  
       div_back_quest.innerHTML = `<button class="NextBackButton" id = "btn_back" onclick="backQuest()">Voltar questão</button>`;
       buttonBack.style.display = "flex";
     } else {
@@ -425,17 +429,17 @@
   }
   function mostrarAcertosEErros() {
     var mensagem = "";
-    for (var index = 0; index < listaRespostas.length; index++) {
-      if (listaIsCorreta[index] == "S") {
+    for (var i = 0; i < listaRespostas.length; i++) {
+      if (listaIsCorreta[i] == "S") {
         mensagem += `<div class="item_resultado">Pergunta: <span style="color:green">${listaIndicePergunta[i]}</span> <br>
-      Resposta: <span style="color:green">${listaRespostas[index]}</span><br>
-      Resposta Correta: <span style="color:green">${listaPerguntas[index].alternativaCorreta}</span><br>
+      Resposta: <span style="color:green">${listaRespostas[i]}</span><br>
+      Resposta Correta: <span style="color:green">${listaPerguntas[i].alternativaCorreta}</span><br>
       </div>
       `;
       } else {
         mensagem += `<div class="item_resultado">Pergunta: <span style="color:red">${listaIndicePergunta[i]}</span> <br>
-      Resposta: <span style="color:red">${listaRespostas[index]}</span><br>
-      Resposta Correta: <span style="color:red">${listaPerguntas[index].alternativaCorreta}</span><br>
+      Resposta: <span style="color:red">${listaRespostas[i]}</span><br>
+      Resposta Correta: <span style="color:red">${listaPerguntas[i].alternativaCorreta}</span><br>
       </div>
       `;
       }
