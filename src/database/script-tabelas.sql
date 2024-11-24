@@ -47,7 +47,59 @@ INSERT INTO Pergunta (opt1, opt2, opt3, opt4, titulo, respostaCorreta) VALUES
 ('Antoine Lavoisier', 'Dmitri Mendeleiev', 'John Dalton', 'Rutherford', 'Quem criou a tabela periódica atual?', 'Dmitri Mendeleiev'),
 ('Bill Gates', 'Alan Turing', 'Steve Jobs', 'Ada Lovelace', 'Quem foi a primeira pessoa a escrever um algoritmo?', 'Ada Lovelace');
 
-
+CREATE TABLE Log_resposta (
+    idLog INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    dtHrResposta DATE,
+    fkPergunta INT NOT NULL,
+    fkUsuario INT NOT NULL,
+    fkResposta INT NOT NULL,
+    FOREIGN KEY (fkPergunta) REFERENCES Pergunta(idPergunta),
+    FOREIGN KEY (fkUsuario) REFERENCES Usuario(idUsuario),
+    FOREIGN KEY (fkResposta) REFERENCES Resposta(idResposta)
+);
+select * from Resposta;
+select * from Pergunta;
+DESC Log_resposta;
+select * from Log_resposta;
+select * from Usuario;
 SELECT 	idPergunta, opt1, opt2, opt3, opt4, titulo, respostaCorreta FROM Pergunta ORDER BY RAND()
 LIMIT 10;
 SELECT COUNT(isCorreta) FROM resposta WHERE isCorreta = 'S';
+
+SELECT
+    nome,
+    (
+        SUM(
+            CASE
+                WHEN isCorreta = 'S' THEN 1
+                ELSE 0
+            END
+        ) / COUNT(isCorreta)
+    ) * 100 AS aproveitamento
+FROM Resposta JOIN Usuario 
+    ON Resposta.fkUsuario = Usuario.idUsuario
+    JOIN Log_resposta
+    ON Resposta.idResposta = Log_resposta.fkResposta
+    WHERE dtHrResposta >= DATE(NOW() - INTERVAL 30 DAY)
+GROUP BY
+    nome
+ORDER BY aproveitamento DESC;
+SELECT
+    nome,
+    (
+        SUM(
+            CASE
+                WHEN isCorreta = 'S' THEN 1
+                ELSE 0
+            END
+        ) / COUNT(isCorreta)
+    ) * 100 AS aproveitamento
+FROM Resposta JOIN Usuario 
+    ON Resposta.fkUsuario = Usuario.idUsuario
+    JOIN Log_resposta
+    ON Resposta.idResposta = Log_resposta.fkResposta
+    WHERE dtHrResposta >= DATE(NOW() - INTERVAL 30 DAY)
+GROUP BY
+    nome
+ORDER BY aproveitamento DESC;
+select * from Log_resposta;
