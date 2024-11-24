@@ -20,7 +20,8 @@ a {
 .container_menu {
   width: 20%;
   height: 100%;
-  background-color: #d9d9d9;
+  background: rgb(255,255,255);
+  background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(176,176,176,1) 100%); 
   border-top-right-radius: 20px;
   border-bottom-right-radius: 20px;
   display: flex;
@@ -71,7 +72,8 @@ a {
 .section_quest {
   height: fit-content;
   width: 70%;
-  background-color: #d9d9d9;
+  background: rgb(213,213,213);
+  background: linear-gradient(180deg, rgba(213,213,213,1) 51%, rgba(176,176,176,1) 100%); 
   border-radius: 20px;
   display: flex;
   flex-direction: column;
@@ -87,6 +89,7 @@ a {
   justify-content: space-around;
 }
 .div_button {
+  cursor:pointer;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -150,11 +153,19 @@ a {
   width: 100%;
   display: flex;
   justify-content: space-around;
+
 }
 #div_back_quest {
   display: none;
 }
+select{
+  width: 50%;
+  height: 5%;
+  text-align: center;
+  margin-bottom: 30px;
+}
 .btn_att {
+  cursor:pointer;
   border: none;
   border-radius: 30px;
   background-color: rgb(36, 36, 36);
@@ -180,6 +191,9 @@ a {
 }
 #div_titulo_pergunta{
   text-align: center;
+  margin-top: 25px;
+  margin-inline: 0;
+  width: 80%;
 }
 
 .container_kpi{
@@ -193,6 +207,7 @@ a {
 
 
 .kpi{
+  border-radius: 20px;
   display: flex;
   flex-direction: column;
   background-color: #d9d9d9;
@@ -240,4 +255,11 @@ a {
   align-items: center;
   width: 100%;
   height: 75%;
+}
+
+.titulo_perguntaatual{
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+
 }

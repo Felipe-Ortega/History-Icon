@@ -23,7 +23,7 @@
 </head>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<body onload="validarSessao();gerarDashboard()">
+<body onload="validarSessao(); gerarDashboard()">
   <div class="container_all">
     <div class="container_menu">
       <div class="menu_top">
@@ -36,9 +36,7 @@
             <a href="pergunta.html"><button>Pergunta</button></a>
           </li>
           <li>
-            <a href="atualizarCadastro.html"
-              ><button>Atualizar cadastro</button></a
-            >
+            <a href="atualizarCadastro.html"><button>Atualizar cadastro</button></a>
           </li>
           <li><a href="cadastrarPergunta.html"><button>Cadastrar pergunta</button></a></li>
           <li>
@@ -50,6 +48,12 @@
     </div>
     <div class="container_quest">
       <div class="container_kpi">
+        <select id="filtro_dias">
+          <option value=1>1 Dia</option>
+          <option value=7>Últimos 7 dias</option>
+          <option value=15>Últimos 15 dias</option>
+          <option selected value=30>Último mês</option>
+        </select>
         <div class="kpis_usu">
           <div class="kpi">
             <h2>Seus acertos</h2>
@@ -96,7 +100,9 @@
 
   function listarRespostasErradasCorretasPorUsuario(isCorreta) {
     var idUsuario = sessionStorage.ID_USUARIO;
-    fetch(`/resposta/listarRespostas/${idUsuario}/${isCorreta}`, {
+    var dias = Number(filtro_dias.value);
+
+    fetch(`/resposta/listarRespostas/${idUsuario}/${isCorreta}/${dias}`, {
       method: "GET",
     })
       .then((res) => {
@@ -117,8 +123,9 @@
   }
 
   function listarRespostasPorUsuario() {
+    var dias = Number(filtro_dias.value);
     var idUsuario = sessionStorage.ID_USUARIO;
-    fetch(`/resposta/listarRespostas/${idUsuario}`, {
+    fetch(`/resposta/listarRespostas/${idUsuario}/${dias}`, {
       method: "GET",
     })
       .then((res) => {
@@ -134,10 +141,17 @@
         console.log(err);
       });
   }
+  const filtroDias = document.getElementById('filtro_dias');
 
+  filtroDias.addEventListener('change', function () {
+    const valorSelecionado = filtroDias.value
+    listarRankingRespostas()
+    gerarDashboard()
+
+  })
   function listarRespostasCorretasErradas(isCorreta) {
-
-    fetch(`/resposta/listarRespostasTotal/${isCorreta}`, {
+    var dias = Number(filtro_dias.value);
+    fetch(`/resposta/listarRespostasTotal/${isCorreta}/${dias}`, {
       method: "GET",
     })
       .then((res) => {
@@ -159,7 +173,8 @@
       });
   }
   function listarRespostas() {
-    fetch(`/resposta/listarRespostas`, {
+    var dias = Number(filtro_dias.value);
+    fetch(`/resposta/listarRespostas/${dias}`, {
       method: "GET",
     })
       .then((res) => {
@@ -177,44 +192,44 @@
   var listaQuantidadeRespostasRanking = [];
   var listaQuantidadeRespostasCorretasRanking = []
   var listaNomeUsuarioRanking = [];
-//   function listarRankingCorretas() {
-//     fetch(`/resposta/listarRankingCorretas`, {
-//       method: "GET",
-//     })
-//       .then((res) => {
-//         res.json().then((json) => {
-//           console.log(`Teste ranking: ${json}`)
-//           for (var i = 0; i < json.length; i++) {
-//           }
-//         });
-//       })
-//       .catch((err) => {
-//         console.log(err)
-//       })
-// }
   var listaAproveitamentoUsuario = []
   var totalRespostas = []
-  function listarRankingRespostas(){
-    fetch(`/resposta/listarRankingRespostas`,{
-      method: "GET"
-    }).then((res) => {
-      res.json().then((json) =>{
-        console.log(`Ranking Respostas: ${json}`)
-        for (var i = json.length-1; i >= 0; i--) {
-          console.log(json[i].aproveitamento)
-          console.log(json[i].nome)
-            listaAproveitamentoUsuario.push(json[i].aproveitamento)
-            listaNomeUsuarioRanking.push(json[i].nome)
-        }
-      });
-    }).catch((err) => {
-      console.log(err)
+
+  let isLoadingRanking = false;
+
+function listarRankingRespostas() {
+    if (isLoadingRanking) return;
+    isLoadingRanking = true;
+
+    var dias = Number(filtro_dias.value);
+    fetch(`/resposta/listarRankingRespostas/${dias}`, {
+        method: "GET"
     })
-  }
+    .then((res) => res.json())
+    .then((json) => {
+        listaAproveitamentoUsuario = [];
+        listaNomeUsuarioRanking = [];
+        for (let i = json.length-1; i >= 0 ; i--) {
+            listaAproveitamentoUsuario.push(json[i].aproveitamento);
+            listaNomeUsuarioRanking.push(json[i].nome);
+        }
+        isLoadingRanking = false;
+    })
+    .catch((err) => {
+        console.log(err);
+        isLoadingRanking = false;
+        
+    });
+}
   var porcentagemAcertos = 0;
 
   function calcularPorcentagemAcertosUsuario() {
-    porcentagemAcertos = Number((qtdRespCorretasUsu / totalRespostasUsu * 100));
+    if (totalRespostasUsu == 0) {
+      porcentagemAcertos = 0
+    } else {
+      porcentagemAcertos = Number((qtdRespCorretasUsu / totalRespostasUsu * 100));
+    }
+    console.log(porcentagemAcertos)
     acertos_usuario.innerHTML = `${porcentagemAcertos.toFixed(0)}%`;
   }
   var porcentagemAcertosTotal = 0;
@@ -230,18 +245,20 @@
   function mostrarQuantidadePerguntasRespondidas() {
     perguntas_usuario.innerHTML
   }
-
+  let myChart;
   function verificarDesempenhoUsuarioVsGlobal() {
     var menor = 0;
     if (porcentagemAcertosTotal < porcentagemAcertos) {
       menor = porcentagemAcertosTotal
-    } else if (porcentagemAcertos > porcentagemAcertosTotal){
+    } else if (porcentagemAcertos > porcentagemAcertosTotal) {
       menor = porcentagemAcertos
-    } else{
+    } else {
       menor = porcentagemAcertos
     }
     var desempenho_usuario = (((porcentagemAcertos - porcentagemAcertosTotal) / menor) * 100)
-
+    if (menor == 0) {
+      desempenho_usuario = 0
+    }
     if (isNaN(desempenho_usuario)) {
       desempenho_usuario = 0
     }
@@ -269,27 +286,30 @@
       mostrarQuantidadePerguntasRespondidas()
       verificarDesempenhoUsuarioVsGlobal()
       const ctx = document.getElementById("myChart");
-  new Chart(ctx, {
-    type: "bar",
-    data: {
-      labels: listaNomeUsuarioRanking,
-      datasets: [{
-        label: "Aproveitamento",
-        data: listaAproveitamentoUsuario,
-          borderWidth: 2,
-          borderColor: "#4444ff",
-          backgroundColor: "#4444ff",
-      }],
-    },
-    option: {
-      scales: {
-        y: {
-          beginAtZero: true,
+      if (myChart) {
+        myChart.destroy();
+      }
+      myChart = new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels: listaNomeUsuarioRanking,
+          datasets: [{
+            label: "Aproveitamento",
+            data: listaAproveitamentoUsuario,
+            borderWidth: 2,
+            borderColor: "#4444ff",
+            backgroundColor: "#4444ff",
+          }],
         },
-      },
-    },
-  });
+        option: {
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
+          },
+        },
+      });
     }, 400);
   }
-  
+
 </script>

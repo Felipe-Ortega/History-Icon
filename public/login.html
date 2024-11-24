@@ -57,7 +57,7 @@
       minuto[1] = minuto[0];
       minuto[0] = "0";
     }
-    var dtHora = `${dataAtual.getFullYear()}-${dataAtual.getMonth()}-${dataAtual.getDate()} ${dataAtual.getHours()}:${minuto}:${dataAtual.getSeconds()}`;
+    var dtHora = `${dataAtual.getFullYear()}-${dataAtual.getMonth()+1}-${dataAtual.getDate()} ${dataAtual.getHours()}:${minuto}:${dataAtual.getSeconds()}`;
     var emailVar = ipt_email.value;
     var senhaVar = ipt_senha.value;
     if (

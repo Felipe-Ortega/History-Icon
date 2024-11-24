@@ -53,6 +53,7 @@ a{
     margin-right: 10%;
   }
 .inputs{
+    background: transparent !important;
     background-color: #d9d9d9;
     height: 3vh;
     width: 100%;
@@ -81,6 +82,8 @@ a{
 #slt_opCorreta{
     height: 4vh;
     width: 72%;
-    background-color: #d9d9d9;
+    background: transparent;
+    text-align: center;
     border: none  ;
+    font-size: 20px;
 }

@@ -1,5 +1,6 @@
 var respostaModel = require("../models/respostaModel");
 
+
 function cadastrar(req, res) {
   fkUsuario = req.body.idServer;
   fkPergunta = req.body.fkPergunta;
@@ -24,25 +25,102 @@ function cadastrar(req, res) {
       });
   }
 }
-
 function listarRespostasCorretasErradasPorUsuario(req, res) {
-  fkUsuario = req.params.idUsuario;
-  isCorreta = req.params.isCorreta;
-  respostaModel.listarRespostasCorretasErradasPorUsuario(fkUsuario, isCorreta).then((resultado) => {
-    res.status(200).json(resultado)
-  })
+   fkUsuario = req.params.idUsuario;
+   isCorreta = req.params.isCorreta;
+   dias = req.params.dias;
+
+  respostaModel
+    .listarRespostasCorretasErradasPorUsuario(fkUsuario, isCorreta, dias)
+    .then((resultado) => {
+      res.status(200).json(resultado);
+    })
+    .catch((erro) => {
+      console.error(
+        "\nHouve um erro ao buscar as respostas corretas ou erradas por usuário! Erro: ",
+        erro.sqlMessage
+      );
+      res.status(500).json(erro.sqlMessage);
+    });
 }
+
 function listarRespostasPorUsuario(req, res) {
-  fkUsuario = req.params.idUsuario
-  respostaModel.listarRespostasPorUsuario(fkUsuario).then((resultado) => {
-    res.status(200).json(resultado)
-  })
+   fkUsuario = req.params.idUsuario;
+   dias = req.params.dias;
+
+  respostaModel
+    .listarRespostasPorUsuario(fkUsuario, dias)
+    .then((resultado) => {
+      res.status(200).json(resultado);
+    })
+    .catch((erro) => {
+      console.error(
+        "\nHouve um erro ao buscar as respostas por usuário! Erro: ",
+        erro.sqlMessage
+      );
+      res.status(500).json(erro.sqlMessage);
+    });
 }
+
+function listarRespostasCorretasErrada(req, res) {
+   isCorreta = req.params.isCorreta;
+   dias = req.params.dias;
+
+  respostaModel
+    .listarRespostasCorretasErrada(isCorreta, dias)
+    .then((resultado) => {
+      res.status(200).json(resultado);
+    })
+    .catch((erro) => {
+      console.error(
+        "\nHouve um erro ao buscar respostas corretas ou erradas! Erro: ",
+        erro.sqlMessage
+      );
+      res.status(500).json(erro.sqlMessage);
+    });
+}
+
+function listarRespostas(req, res) {
+  dias = req.params.dias;
+  respostaModel
+    .listarRespostas(dias)
+    .then((resultado) => {
+      res.status(200).json(resultado);
+    })
+    .catch((erro) => {
+      console.error(
+        "\nHouve um erro ao buscar as respostas! Erro: ",
+        erro.sqlMessage
+      );
+      res.status(500).json(erro.sqlMessage);
+    });
+}
+
+function listarRankingRespostas(req, res) {
+  dias = req.params.dias;
+  console.log(`Testando dias no controller: ${dias}`);
+  respostaModel
+    .listarRankingRespostas(dias)
+    .then((resultado) => {
+      res.status(200).json(resultado);
+    })
+    .catch((erro) => {
+      console.error(
+        "\nHouve um erro ao buscar o ranking de respostas! Erro: ",
+        erro.sqlMessage
+      );
+      res.status(500).json(erro.sqlMessage);
+    });
+}
+
 function cadastrarLog(req, res) {
-  var fkPergunta = req.body.idPergunta;
-  var dtHora = req.body.dtServer;
-  usuarioModel
-    .cadastrarLog(fkPergunta, dtHora)
+  var fkPergunta = req.body.fkPergunta;
+  var dtHora = req.body.dtHrAcesso;
+  var fkResposta = req.body.fkResposta
+  var fkUsuario = req.body.fkUsuario
+
+  respostaModel
+    .cadastrarLog(fkUsuario, fkPergunta, fkResposta, dtHora)
     .then(function (resultado) {
       res.json(resultado);
     })
@@ -54,24 +132,6 @@ function cadastrarLog(req, res) {
       );
       res.status(500).json(erro.sqlMessage);
     });
-}
-function listarRespostasCorretasErrada(req, res) {
-  var isCorreta = req.params.isCorreta;
-  respostaModel.listarRespostasCorretasErrada(isCorreta).then((resultado) => {
-    res.status(200).json(resultado)
-  })
-}
-
-function listarRespostas(req, res) {
-  respostaModel.listarRespostas(req, res).then((resultado => {
-    res.status(200).json(resultado)
-  }))
-}
-
-function listarRankingRespostas(req, res) {
-  respostaModel.listarRankingRespostas(req, res).then((resultado => {
-    res.status(200).json(resultado)
-  }))
 }
 module.exports = {
   cadastrar,

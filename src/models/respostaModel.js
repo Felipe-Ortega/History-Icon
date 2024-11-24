@@ -5,47 +5,93 @@ function cadastrar(fkUsuario, fkPergunta, resposta, isCorreta) {
   return database.executar(instrucaoSql);
 }
 // Listar quantidade de corretas ou erradas por usuario
-function listarRespostasCorretasErradasPorUsuario(fkUsuario, isCorreta){
-  var instrucaoSql = `SELECT COUNT(isCorreta) as corretas FROM Resposta WHERE isCorreta = '${isCorreta}' AND fkUsuario = ${fkUsuario};`
+function listarRespostasCorretasErradasPorUsuario(fkUsuario, isCorreta, dias) {
+  var instrucaoSql = `
+    SELECT COUNT(isCorreta) as corretas 
+    FROM Resposta
+    JOIN Log_resposta
+        ON Resposta.idResposta = Log_resposta.fkResposta
+    WHERE isCorreta = '${isCorreta}' 
+      AND Resposta.fkUsuario = ${parseInt(fkUsuario, 10)} 
+      AND dtHrResposta >= NOW() - INTERVAL ${parseInt(dias, 10)} DAY;
+  `;
   return database.executar(instrucaoSql);
 }
+
 // Listar quantidade de respostas por usuario
-function listarRespostasPorUsuario(fkUsuario){
-  var instrucaoSql = `SELECT COUNT(isCorreta) as corretas FROM Resposta WHERE fkUsuario = ${fkUsuario};`
+function listarRespostasPorUsuario(fkUsuario, dias) {
+  var instrucaoSql = `
+    SELECT COUNT(isCorreta) as corretas 
+    FROM Resposta
+    JOIN Log_resposta
+        ON Resposta.idResposta = Log_resposta.fkResposta
+    WHERE Resposta.fkUsuario = ${parseInt(fkUsuario, 10)} 
+      AND dtHrResposta >= NOW() - INTERVAL ${parseInt(dias, 10)} DAY;
+  `;
   return database.executar(instrucaoSql);
 }
+
 // Listar quantidade de respostas certas e erradas de todos os usuarios
-function listarRespostasCorretasErrada(isCorreta){
-  var instrucaoSql = `SELECT COUNT(isCorreta) as corretas FROM Resposta WHERE isCorreta = '${isCorreta}';`
+function listarRespostasCorretasErrada(isCorreta, dias) {
+  var instrucaoSql = `
+    SELECT COUNT(isCorreta) as corretas 
+    FROM Resposta
+    JOIN Log_resposta
+        ON Resposta.idResposta = Log_resposta.fkResposta
+    WHERE isCorreta = '${isCorreta}' 
+      AND dtHrResposta >= NOW() - INTERVAL ${parseInt(dias, 10)} DAY;
+  `;
   return database.executar(instrucaoSql);
 }
 
 // Listar quantidade de respostas de todos os usuarios
-function listarRespostas(){
-  var instrucaoSql = `SELECT COUNT(isCorreta) as corretas FROM Resposta;`
+function listarRespostas(dias) {
+  var instrucaoSql = `
+    SELECT COUNT(isCorreta) as corretas 
+    FROM Resposta
+    JOIN Log_resposta
+        ON Resposta.idResposta = Log_resposta.fkResposta
+    WHERE dtHrResposta >= NOW() - INTERVAL ${parseInt(dias, 10)} DAY;
+  `;
   return database.executar(instrucaoSql);
 }
 
-function listarRankingRespostas(){
-  var instrucaoSql = `SELECT
-    nome,
-    (
-        SUM(
+function listarRankingRespostas(dias) {
+  var instrucaoSql = `
+    SELECT
+        nome,
+        (
             CASE
-                WHEN isCorreta = 'S' THEN 1
-                ELSE 0
+                WHEN COUNT(isCorreta) = 0 THEN 0
+                ELSE SUM(
+                    CASE
+                        WHEN isCorreta = 'S' THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT(isCorreta)
             END
-        ) / COUNT(isCorreta)
-    ) * 100 AS aproveitamento
-FROM Resposta
-    JOIN Usuario ON Resposta.fkUsuario = Usuario.idUsuario
-GROUP BY
-    nome
-ORDER BY aproveitamento DESC;`
- return database.executar(instrucaoSql);
+        ) * 100 AS aproveitamento
+    FROM Resposta
+    JOIN Usuario 
+        ON Resposta.fkUsuario = Usuario.idUsuario
+    JOIN Log_resposta
+        ON Resposta.idResposta = Log_resposta.fkResposta
+    WHERE dtHrResposta >= NOW() - INTERVAL ${parseInt(dias, 10)} DAY
+    GROUP BY nome
+    ORDER BY aproveitamento DESC;
+  `;
+
+  return database.executar(instrucaoSql);
 }
 
+
+function cadastrarLog(fkUsuario, fkPergunta, fkResposta, dtHr) {
+  var instrucaoSql = `INSERT INTO Log_resposta (fkUsuario, fkPergunta, fkResposta, dtHrResposta) VALUES (${fkUsuario}, ${fkPergunta}, ${fkResposta}, '${dtHr}')`
+  return database.executar(instrucaoSql);
+
+}
 module.exports = {
+  cadastrarLog,
   cadastrar,
   listarRespostasCorretasErradasPorUsuario,
   listarRespostasPorUsuario,
@@ -53,3 +99,30 @@ module.exports = {
   listarRespostas,
   listarRankingRespostas
 };
+
+
+function listarDesempenho() {
+  fetch("/resposta/listarDesempenho", {
+    method: "GET"
+  }).then((res) => {
+    res.json().then((json) => {
+      console.log(json)
+      acertos = json.qtdAcertos
+      erros = json.qtdErros
+      const ctx = document.getElementById("myChart");
+      new Chart(ctx, {
+        type: "doughnut",
+        data: {
+          labels: ["Erros", "Acertos"],
+          datasets: [{
+            label: "Acertos e Erros",
+            data: [qtdErros, qtdAcertos],
+            backgroundColor: [
+              'rgb(255, 99, 132)',
+              'rgb(54, 162, 235)',]
+          }],
+        },
+      });
+    })
+  })
+}

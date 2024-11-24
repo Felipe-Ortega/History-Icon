@@ -1,111 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pergunta | HistoryIcon</title>
-    <link rel="icon" href="../images/logo_history.png" />
-    <link rel="stylesheet" href="../css/style_pergunta.css" />
-    <script
-      src="https://kit.fontawesome.com/39f3be7d68.js"
-      crossorigin="anonymous"
-    ></script>
-    <script src="../js/sessao.js"></script>
-    <script src="../js/alerta.js"></script>
-  </head>
-  <body onload="validarSessao() ;listarAleatorio()">
-    <div class="container_all">
-      <div class="container_menu">
-        <div class="menu_top">
-          <div class="div_well_come">
-            <h2>Bem vindo, <span id="b_usuario"></span></h2>
-          </div>
 
-          <ul>
-            <li>
-              <a href="pergunta.html"><button>Pergunta</button></a>
-            </li>
-            <li>
-              <a href="atualizarCadastro.html"
-                ><button>Atualizar cadastro</button></a
-              >
-            </li>
-            <li><a href="cadastrarPergunta.html"><button>Cadastrar pergunta</button></a></li>
-            <li>
-              <a href="dashboard.html"><button>Dashboard</button></a>
-            </li>
-          </ul>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pergunta | HistoryIcon</title>
+  <link rel="icon" href="../images/logo_history.png" />
+  <link rel="stylesheet" href="../css/style_pergunta.css" />
+  <script src="https://kit.fontawesome.com/39f3be7d68.js" crossorigin="anonymous"></script>
+  <script src="../js/sessao.js"></script>
+  <script src="../js/alerta.js"></script>
+</head>
+
+<body onload="validarSessao() ;listarAleatorio()">
+  <div class="container_all">
+    <div class="container_menu">
+      <div class="menu_top">
+        <div class="div_well_come">
+          <h2>Bem vindo, <span id="b_usuario"></span></h2>
         </div>
-        <button class="btn_sair" onclick="limparSessao()">Sair</button>
+
+        <ul>
+          <li>
+            <a href="pergunta.html"><button>Pergunta</button></a>
+          </li>
+          <li>
+            <a href="atualizarCadastro.html"><button>Atualizar cadastro</button></a>
+          </li>
+          <li><a href="cadastrarPergunta.html"><button>Cadastrar pergunta</button></a></li>
+          <li>
+            <a href="dashboard.html"><button>Dashboard</button></a>
+          </li>
+        </ul>
       </div>
-      <div class="container_quest">
-        <div class="section_quest" id="section_quest">
+      <button class="btn_sair" onclick="limparSessao()">Sair</button>
+    </div>
+    <div class="container_quest">
+      <div class="section_quest" id="section_quest">
+        <div class="titulo_perguntaatual">
           <h1 id="div_titulo_pergunta"></h1>
           <h2 id="perguntaAtual"></h2>
-          <div class="section_buttons">
-            <div class="div_button">
-              <button
-                onclick="alterStyle('opt1','opt2','opt3','opt4',)"
-                id="opt1"
-                class="none"
-                value=""
-              >
-                <p id="alternativaA"></p>
-              </button>
-            </div>
-            <div class="div_button">
-              <button
-                onclick="alterStyle('opt2','opt1','opt3','opt4',)"
-                value=""
-                id="opt2"
-                class="none"
-              >
-                <p id="alternativaB"></p>
-              </button>
-            </div>
-            <div class="div_button">
-              <button
-                onclick="alterStyle('opt3','opt2','opt1','opt4',)"
-                value=""
-                id="opt3"
-                class="none"
-              >
-                <p id="alternativaC"></p>
-              </button>
-            </div>
-            <div class="div_button">
-              <button
-                onclick="alterStyle('opt4','opt2','opt3','opt1',)"
-                value=""
-                id="opt4"
-                class="none"
-              >
-                <p id="alternativaD"></p>
-              </button>
-            </div>
+        </div>
+        <div class="section_buttons">
+          <div class="div_button">
+            <button onclick="alterStyle('opt1','opt2','opt3','opt4',)" id="opt1" class="none" value="">
+              <h2 id="alternativaA"></h2>
+            </button>
           </div>
-          <span id="selec_erro"></span>
-          <div class="div_button_back_next">
-            <span id="div_back_quest"></span>
+          <div class="div_button">
+            <button onclick="alterStyle('opt2','opt1','opt3','opt4',)" value="" id="opt2" class="none">
+              <h2 id="alternativaB"></h2>
+            </button>
+          </div>
+          <div class="div_button">
+            <button onclick="alterStyle('opt3','opt2','opt1','opt4',)" value="" id="opt3" class="none">
+              <h2 id="alternativaC"></h2>
+            </button>
+          </div>
+          <div class="div_button">
+            <button onclick="alterStyle('opt4','opt2','opt3','opt1',)" value="" id="opt4" class="none">
+              <h2 id="alternativaD"></h2>
+            </button>
+          </div>
+        </div>
+        <span id="selec_erro"></span>
+        <div class="div_button_back_next">
+          <span id="div_back_quest"></span>
 
-            <div>
-              <button
-                onclick="nextQuest()"
-                class="NextBackButton"
-                id="next_quest"
-              >
-                Próxima questão
-              </button>
-              <div id="div_teste"></div>
-            </div>
+          <div>
+            <button onclick="nextQuest()" class="NextBackButton" id="next_quest">
+              Próxima questão
+            </button>
+            <div id="div_teste"></div>
           </div>
         </div>
       </div>
     </div>
-  </body>
+  </div>
+</body>
+
 </html>
 <script>
-  
+
   var listaPerguntas = [
     {
       id: null,
@@ -197,10 +173,10 @@
       alternativaD: "",
       alternativaCorreta: "",
     },
-];
-    
-    var validaSelect = false;
-  function listarAleatorio(){
+  ];
+
+  var validaSelect = false;
+  function listarAleatorio() {
     fetch("/pergunta/listarAleatorio", {
       method: "GET",
     }).then((res => {
@@ -208,12 +184,12 @@
         console.log(json)
         for (var i = 0; i < json.length; i++) {
           listaPerguntas[i].id = json[i].idPergunta,
-          listaPerguntas[i].pergunta = json[i].titulo,
-          listaPerguntas[i].alternativaA = json[i].opt1,
-          listaPerguntas[i].alternativaB = json[i].opt2,
-          listaPerguntas[i].alternativaC = json[i].opt3,
-          listaPerguntas[i].alternativaD = json[i].opt4,
-          listaPerguntas[i].alternativaCorreta = json[i].respostaCorreta
+            listaPerguntas[i].pergunta = json[i].titulo,
+            listaPerguntas[i].alternativaA = json[i].opt1,
+            listaPerguntas[i].alternativaB = json[i].opt2,
+            listaPerguntas[i].alternativaC = json[i].opt3,
+            listaPerguntas[i].alternativaD = json[i].opt4,
+            listaPerguntas[i].alternativaCorreta = json[i].respostaCorreta
         }
       })
     }))
@@ -221,7 +197,7 @@
   var listaRespostas = [];
   var indiceQuestao = 0;
   var qtdAcertos = 0;
-  var listaIndicePergunta = [1,2,3,4,5,6,7,8,9,10]
+  var listaIndicePergunta = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
   const bt = document.getElementById(`opt1`);
   const bt2 = document.getElementById(`opt2`);
   const bt3 = document.getElementById(`opt3`);
@@ -229,20 +205,20 @@
   var listaBotoes = [bt, bt2, bt3, bt4];
   setTimeout(() => {
     div_titulo_pergunta.innerHTML = listaPerguntas[indiceQuestao].pergunta;
-  alternativaA.innerHTML = listaPerguntas[indiceQuestao].alternativaA;
-  alternativaB.innerHTML = listaPerguntas[indiceQuestao].alternativaB;
-  alternativaC.innerHTML = listaPerguntas[indiceQuestao].alternativaC;
-  alternativaD.innerHTML = listaPerguntas[indiceQuestao].alternativaD;
-  bt.setAttribute("value", listaPerguntas[indiceQuestao].alternativaA);
-  bt2.setAttribute("value", listaPerguntas[indiceQuestao].alternativaB);
-  bt3.setAttribute("value", listaPerguntas[indiceQuestao].alternativaC);
-  bt4.setAttribute("value", listaPerguntas[indiceQuestao].alternativaD);
-  perguntaAtual.innerHTML = `(${indiceQuestao+1}/10)`
+    alternativaA.innerHTML = listaPerguntas[indiceQuestao].alternativaA;
+    alternativaB.innerHTML = listaPerguntas[indiceQuestao].alternativaB;
+    alternativaC.innerHTML = listaPerguntas[indiceQuestao].alternativaC;
+    alternativaD.innerHTML = listaPerguntas[indiceQuestao].alternativaD;
+    bt.setAttribute("value", listaPerguntas[indiceQuestao].alternativaA);
+    bt2.setAttribute("value", listaPerguntas[indiceQuestao].alternativaB);
+    bt3.setAttribute("value", listaPerguntas[indiceQuestao].alternativaC);
+    bt4.setAttribute("value", listaPerguntas[indiceQuestao].alternativaD);
+    perguntaAtual.innerHTML = `(${indiceQuestao + 1}/10)`
   }, 500);
 
 
 
- 
+
   function choseQuestion() {
     //Alterando os valores de acordo com o indice da questão
     div_titulo_pergunta.innerHTML = listaPerguntas[indiceQuestao].pergunta;
@@ -250,11 +226,11 @@
     alternativaB.innerHTML = listaPerguntas[indiceQuestao].alternativaB;
     alternativaC.innerHTML = listaPerguntas[indiceQuestao].alternativaC;
     alternativaD.innerHTML = listaPerguntas[indiceQuestao].alternativaD;
-    perguntaAtual.innerHTML = `(${indiceQuestao+1}/10)`
+    perguntaAtual.innerHTML = `(${indiceQuestao + 1}/10)`
     var buttonBack = document.getElementById("div_back_quest");
     // Verifico o indice da questão para adicionar o botão de voltar questão
     if (indiceQuestao > 0) {
-  
+
       div_back_quest.innerHTML = `<button class="NextBackButton" id = "btn_back" onclick="backQuest()">Voltar questão</button>`;
       buttonBack.style.display = "flex";
     } else {
@@ -354,7 +330,7 @@
   }
   var listaDeAcertos = [];
   var listaIsCorreta = [];
-  
+
   function verificaPontuacao() {
     listaDeAcertos = [];
     for (var index = 0; index < listaRespostas.length; index++) {
@@ -369,10 +345,33 @@
       }
     }
   }
+
+  function cadastrarLog(fkUsuario, fkPergunta, fkResposta, dtHrAcesso) {
+    fetch("/resposta/cadastrarLog", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        fkUsuario: fkUsuario,
+        fkPergunta: fkPergunta,
+        fkResposta: fkResposta,
+        dtHrAcesso: dtHrAcesso
+      })
+    }).then(function (resposta) {
+      resposta.json().then((json) => {
+        var respotaBanco = JSON.stringify(json)
+      })
+    })
+  }
+  var respostaBancoEnviar = []
   function enviarResposta() {
     nextQuest();
     verificaPontuacao();
+    var respostaBanco = "";
     var fkUsuario = sessionStorage.ID_USUARIO;
+    let dataAtual = new Date();
+    var dtHora = `${dataAtual.getFullYear()}-${dataAtual.getMonth()+1}-${dataAtual.getDate()}`;
     for (var index = 0; index < listaRespostas.length; index++) {
       var fkPergunta = listaPerguntas[index].id;
       var resposta = listaRespostas[index];
@@ -388,20 +387,26 @@
           resposta: resposta,
           isCorreta: isCorreta,
         }),
-      })
-        .then(function (resposta) {
-          console.log("resposta: ", resposta);
-
-          if (resposta.ok) {
-            console.log(`Resposta ${index} cadastrada com sucesso`);
-          } else {
-            throw "Houve um erro ao tentar realizar o cadastro!";
-          }
+      }).then(function (resposta) {
+        resposta.json().then((json) => {
+          console.log(json.insertId)
+          respostaBancoEnviar.push(json.insertId)
         })
+        if (resposta.ok) {
+          console.log(`Resposta ${index} cadastrada com sucesso`);
+        } else {
+          throw "Houve um erro ao tentar realizar o cadastro!";
+        }
+      })
         .catch(function (resposta) {
           console.log(`#ERRO: ${resposta}`);
         });
     }
+    setTimeout(() => {
+      for (var i = 0; i < listaPerguntas.length; i++) {
+      cadastrarLog(fkUsuario, listaPerguntas[i].id, respostaBancoEnviar[i], dtHora)
+    }
+    }, 1000);
     mostrarAcertosEErros();
   }
   var listaRespostasCertas = [];
@@ -424,7 +429,7 @@
       listaInserirNoBanco[index].isCorreta = listaIsCorreta[index];
     }
   }
-  function refazer(){
+  function refazer() {
     window.location.reload()
   }
   function mostrarAcertosEErros() {
