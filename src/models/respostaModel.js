@@ -1,3 +1,4 @@
+const { parse } = require("path");
 var database = require("../database/config");
 
 function cadastrar(fkUsuario, fkPergunta, resposta, isCorreta) {
@@ -90,6 +91,33 @@ function cadastrarLog(fkUsuario, fkPergunta, fkResposta, dtHr) {
   return database.executar(instrucaoSql);
 
 }
+
+ function listarDesempenhoUsuarioDias(dias, idUsuario){
+  var instrucaoSql = `SELECT
+    nome,
+    dtHrResposta,
+    (
+        CASE
+            WHEN COUNT(isCorreta) = 0 THEN 0
+            ELSE SUM(
+                CASE
+                    WHEN isCorreta = 'S' THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(isCorreta)
+        END
+    ) * 100 AS aproveitamento
+FROM Resposta
+JOIN Usuario 
+    ON Resposta.fkUsuario = Usuario.idUsuario
+JOIN Log_resposta
+    ON Resposta.idResposta = Log_resposta.fkResposta
+WHERE dtHrResposta >= NOW() - INTERVAL ${parseInt(dias, 10)} DAY AND idUsuario = ${parseInt(idUsuario, 10)}
+GROUP BY nome, dtHrResposta
+ORDER BY aproveitamento DESC;`;
+return database.executar(instrucaoSql);
+
+ }
 module.exports = {
   cadastrarLog,
   cadastrar,
@@ -97,32 +125,7 @@ module.exports = {
   listarRespostasPorUsuario,
   listarRespostasCorretasErrada,
   listarRespostas,
-  listarRankingRespostas
+  listarRankingRespostas,
+  listarDesempenhoUsuarioDias
 };
 
-
-function listarDesempenho() {
-  fetch("/resposta/listarDesempenho", {
-    method: "GET"
-  }).then((res) => {
-    res.json().then((json) => {
-      console.log(json)
-      acertos = json.qtdAcertos
-      erros = json.qtdErros
-      const ctx = document.getElementById("myChart");
-      new Chart(ctx, {
-        type: "doughnut",
-        data: {
-          labels: ["Erros", "Acertos"],
-          datasets: [{
-            label: "Acertos e Erros",
-            data: [qtdErros, qtdAcertos],
-            backgroundColor: [
-              'rgb(255, 99, 132)',
-              'rgb(54, 162, 235)',]
-          }],
-        },
-      });
-    })
-  })
-}

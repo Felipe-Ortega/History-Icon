@@ -77,8 +77,13 @@
         </div>
         <div class="ranking kpi">
           <h1>Ranking</h1>
-          <div class="chart">
-            <canvas id="myChart"></canvas>
+          <div class="graficos_aproveitamento">
+            <div class="chart">
+              <canvas id="myChart"></canvas>
+            </div>
+            <div class="chart grafico2">
+              <canvas id="myChart2"></canvas>
+            </div>
           </div>
         </div>
       </div>
@@ -197,30 +202,54 @@
 
   let isLoadingRanking = false;
 
-function listarRankingRespostas() {
+  function listarRankingRespostas() {
     if (isLoadingRanking) return;
     isLoadingRanking = true;
 
     var dias = Number(filtro_dias.value);
     fetch(`/resposta/listarRankingRespostas/${dias}`, {
-        method: "GET"
+      method: "GET"
     })
-    .then((res) => res.json())
-    .then((json) => {
+      .then((res) => res.json())
+      .then((json) => {
         listaAproveitamentoUsuario = [];
         listaNomeUsuarioRanking = [];
-        for (let i = json.length-1; i >= 0 ; i--) {
-            listaAproveitamentoUsuario.push(json[i].aproveitamento);
-            listaNomeUsuarioRanking.push(json[i].nome);
+        for (let i = json.length - 1; i >= 0; i--) {
+          listaAproveitamentoUsuario.push(json[i].aproveitamento);
+          listaNomeUsuarioRanking.push(json[i].nome);
         }
         isLoadingRanking = false;
-    })
-    .catch((err) => {
+      })
+      .catch((err) => {
         console.log(err);
         isLoadingRanking = false;
-        
+
+      });
+  }
+  var listaAproveitamentoPorDia = [];
+  var listaDataPorDia = []
+  function listarDesempenhoUsuarioDias() {
+    listaAproveitamentoPorDia = []
+    listaDataPorDia = []
+    var dias = Number(filtro_dias.value);
+    var idUsuario = Number(sessionStorage.ID_USUARIO)
+    console.log(dias + "testando dias")
+    console.log(idUsuario + "testando usuario")
+    fetch(`/resposta/listarDesempenhoUsuarioDias/${idUsuario}/${dias}`, {
+      method: "GET"
+    }).then((res) => res.json()).then((json) => {
+      console.log(json + "Testando listar dia usuarios")
+      console.log(json[0])
+      for (var index = 0; index < json.length; index++) {
+        listaAproveitamentoPorDia.push(json[index].aproveitamento)
+        listaDataPorDia.push(json[index].dtHrResposta.slice(0,10))
+
+      }
+    }).catch((err) => {
+      console.log(err);
     });
-}
+  }
+
   var porcentagemAcertos = 0;
 
   function calcularPorcentagemAcertosUsuario() {
@@ -272,6 +301,7 @@ function listarRankingRespostas() {
       desempenho_usuario_vs_global.innerHTML = `Abaixo da média`
     }
   }
+  let myChart2;
   function gerarDashboard() {
     listarRespostasErradasCorretasPorUsuario('S')
     listarRespostasErradasCorretasPorUsuario('N')
@@ -280,11 +310,13 @@ function listarRankingRespostas() {
     listarRespostasCorretasErradas('N')
     listarRespostas()
     listarRankingRespostas()
+    listarDesempenhoUsuarioDias()
     setTimeout(() => {
       calcularPorcentagemAcertosUsuario()
       calcularPorcentagemAcertosTotal()
       mostrarQuantidadePerguntasRespondidas()
       verificarDesempenhoUsuarioVsGlobal()
+      var dias = Number(filtro_dias.value);
       const ctx = document.getElementById("myChart");
       if (myChart) {
         myChart.destroy();
@@ -294,10 +326,10 @@ function listarRankingRespostas() {
         data: {
           labels: listaNomeUsuarioRanking,
           datasets: [{
-            label: "Aproveitamento",
+            label: `Aproveitamento nos últimos ${dias} dias`,
             data: listaAproveitamentoUsuario,
             borderWidth: 2,
-            borderColor: "#4444ff",
+            borderColor: "#4444ff ",
             backgroundColor: "#4444ff",
           }],
         },
@@ -309,6 +341,41 @@ function listarRankingRespostas() {
           },
         },
       });
+      const ctx2 = document.getElementById("myChart2");
+      const grafico2 = document.getElementsByClassName("grafico2")
+      
+      if (myChart2) {
+        myChart2.destroy();
+      }
+      if (dias == 1) {
+        grafico2.style.display = 'none'
+        ctx2.style.display = 'none'
+      } else{
+        grafico2.style.display = 'block'
+        myChart2 = new Chart(ctx2, {
+          
+        type: "line",
+        data: {
+          labels: listaDataPorDia,
+          datasets: [
+            {
+              label: `Aproveitamento nos últimos ${dias} dias`,
+              data: listaAproveitamentoPorDia,
+              borderWidth: 2,
+              borderColor: "#ff5927",
+              backgroundColor: "#ff5927",
+            },
+          ],
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
+          },
+        },
+      })
+      };
     }, 400);
   }
 

@@ -228,26 +228,32 @@ select{
 .kpis_usu{
   display: flex;
   width: 100%;
-  height: 25%;
+  min-height: 20%;
   justify-content: space-around;
 }
 
 .kpis_global{
   display: flex;
   width: 100%;
-  min-height: 25%;
+  min-height: 20%;
   height: fit-content;
   justify-content: space-around;
 }
 
 .ranking{
-  min-height: 30%;
+  min-height: 40%;
   height: fit-content;
   width: 88%;
   background-color: #d9d9d9;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.graficos_aproveitamento{
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 80%;
 }
 .chart{
   display: flex;

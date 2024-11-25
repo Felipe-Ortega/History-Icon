@@ -38,4 +38,9 @@ router.get("/listarRankingRespostas/:dias", function(req,res){
 router.post("/cadastrarLog", function(req,res){
     respostaController.cadastrarLog(req,res)
 })
+
+router.get("/listarDesempenhoUsuarioDias/:idUsuario/:dias", function(req,res){
+    respostaController.listarDesempenhoUsuarioDias(req,res)
+})
+
 module.exports = router;

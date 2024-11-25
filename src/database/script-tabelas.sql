@@ -103,3 +103,54 @@ GROUP BY
     nome
 ORDER BY aproveitamento DESC;
 select * from Log_resposta;
+
+
+SELECT
+    nome,
+    dtHrResposta,
+    (
+        CASE
+            WHEN COUNT(isCorreta) = 0 THEN 0
+            ELSE SUM(
+                CASE
+                    WHEN isCorreta = 'S' THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(isCorreta)
+        END
+    ) * 100 AS aproveitamento
+FROM Resposta
+JOIN Usuario 
+    ON Resposta.fkUsuario = Usuario.idUsuario
+JOIN Log_resposta
+    ON Resposta.idResposta = Log_resposta.fkResposta
+WHERE dtHrResposta >= NOW() - INTERVAL 10 DAY AND idUsuario = 1
+GROUP BY nome, dtHrResposta
+ORDER BY aproveitamento DESC;
+
+SELECT
+    nome,
+    dtHrResposta,
+    (
+        CASE
+            WHEN COUNT(isCorreta) = 0 THEN 0
+            ELSE SUM(
+                CASE
+                    WHEN isCorreta = 'S' THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(isCorreta)
+        END
+    ) * 100 AS aproveitamento
+FROM Resposta
+JOIN Usuario 
+    ON Resposta.fkUsuario = Usuario.idUsuario
+JOIN Log_resposta
+    ON Resposta.idResposta = Log_resposta.fkResposta
+WHERE dtHrResposta >= NOW() - INTERVAL ${parseInt(dias, 10)} DAY
+GROUP BY nome, dtHrResposta
+ORDER BY aproveitamento DESC;
+
+
+
+SELECT nome, max(altura_hobbits) as maior, min(altura_hobbits) as menor, avg(altura_hobbits) as media FROM usuario join alturas_usuarios ON usuario.id = fk_usuario ORDER BY altura_hobbits;

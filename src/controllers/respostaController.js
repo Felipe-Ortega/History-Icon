@@ -133,8 +133,26 @@ function cadastrarLog(req, res) {
       res.status(500).json(erro.sqlMessage);
     });
 }
+
+function listarDesempenhoUsuarioDias(req,res){
+  var idUsuario = Number(req.params.idUsuario)
+  var dias = Number(req.params.dias)
+  console.log(dias + "testando diassssssssss")
+  console.log(idUsuario + "testando usuariossssss")
+  respostaModel.listarDesempenhoUsuarioDias(dias, idUsuario).then(function (resultado) {
+    res.json(resultado);
+  }).catch(function (erro) {
+    console.log(erro)
+    console.log(
+      "\nHouve um erro ao listar o desempenho em dias! Erro: ",
+      erro.sqlMessage
+    );
+    res.status(500).json(erro.sqlMessage);
+  })
+}
 module.exports = {
   cadastrar,
+  listarDesempenhoUsuarioDias,
   listarRespostasCorretasErradasPorUsuario,
   listarRespostasPorUsuario,
   listarRespostasCorretasErrada,
