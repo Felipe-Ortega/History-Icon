@@ -120,7 +120,6 @@
     ) {
       div_erro.innerHTML = `<span style="color:red">Preencha todos os campos</span>`;
     } else {
-      div_erro.innerHTML = ``;
       if (opCorreta == "opt_op1") {
         opCorreta = op1;
       } else if (opCorreta == "opt_op2") {
@@ -142,9 +141,11 @@
           op4Server: op4,
           tituloServer: titulo,
           respostaCorreta: opCorreta,
+          
         }),
       }).then(function (resposta) {
         console.log("resposta altura: ", resposta);
+        div_erro.innerHTML = `Pergunta cadastrada com sucesso`;
       });
     }
   }
