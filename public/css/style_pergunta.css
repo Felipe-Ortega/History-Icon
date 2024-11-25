@@ -71,6 +71,7 @@ a {
 }
 .section_quest {
   height: fit-content;
+  max-height: 100%;
   width: 70%;
   background: rgb(213,213,213);
   background: linear-gradient(180deg, rgba(213,213,213,1) 51%, rgba(176,176,176,1) 100%); 
@@ -155,14 +156,23 @@ a {
   justify-content: space-around;
 
 }
+.grafico2{
+  display: none;
+}
 #div_back_quest {
   display: none;
 }
-select{
+#filtro_dias{
   width: 50%;
   height: 5%;
   text-align: center;
   margin-bottom: 30px;
+}
+#tipo_grafico{
+  width: 50%;
+  text-align: center;
+  border: none;
+  background-color: transparent;
 }
 .btn_att {
   cursor:pointer;
@@ -212,7 +222,7 @@ select{
   flex-direction: column;
   background-color: #d9d9d9;
   height: 80%;
-  width: 30%;
+  width: 20%;
   text-align: center;
   justify-content: center;
   align-items: center;
@@ -225,23 +235,14 @@ select{
 .acert_global{
   padding-inline: 6vw;
 }
-.kpis_usu{
+.kpis_top{
   display: flex;
-  width: 100%;
-  min-height: 20%;
   justify-content: space-around;
-}
-
-.kpis_global{
-  display: flex;
   width: 100%;
-  min-height: 20%;
-  height: fit-content;
-  justify-content: space-around;
 }
 
 .ranking{
-  min-height: 40%;
+  min-height: 55%;
   height: fit-content;
   width: 88%;
   background-color: #d9d9d9;
@@ -260,7 +261,7 @@ select{
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 75%;
+  height: 100%;
 }
 
 .titulo_perguntaatual{

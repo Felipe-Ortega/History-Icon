@@ -54,43 +54,42 @@
           <option value=15>Últimos 15 dias</option>
           <option selected value=30>Último mês</option>
         </select>
-        <div class="kpis_usu">
+        <div class="kpis_top">
           <div class="kpi">
             <h2>Seus acertos</h2>
             <h2 id="acertos_usuario"></h2>
           </div>
-          <div class="kpi perg_resp">
+          <div class="kpi">
             <h2>Perguntas Respondidas</h2>
             <h2 id="perguntas_usuario"></h2>
           </div>
-        </div>
-        <div class="kpis_global">
           <div class="kpi">
-            <h2>Você está</h2>
-            <h2 id="acima_usuario"></h2>
-            <h2 id="desempenho_usuario_vs_global"></h2>
+              <h2>Você está</h2>
+              <h2 id="acima_usuario"></h2>
+              <h2 id="desempenho_usuario_vs_global"></h2>
           </div>
-          <div class="kpi acert_global">
-            <h2>Acertos global</h2>
+          <div class="kpi">
+            <h2>Acertos global</h2> 
             <h2 id="acerto_global"></h2>
           </div>
         </div>
         <div class="ranking kpi">
-          <h1>Ranking</h1>
-          <div class="graficos_aproveitamento">
+          <div style="display: flex; align-items: center; height: 100% ; justify-content: space-around; width: 50%;">
+            <h3>Ranking</h3>
+            <select id="tipo_grafico">
+              <option value="ranking">Ranking</option>
+              <option value="desempenho">Desempenho</option>
+            </select>
+          </div>
+          <div class="graficos_aproveitamento" id="graficos_aproveitamento">
             <div class="chart">
               <canvas id="myChart"></canvas>
-            </div>
-            <div class="chart grafico2">
-              <canvas id="myChart2"></canvas>
-            </div>
+            </div>            
           </div>
         </div>
-      </div>
     </div>
   </div>
 </body>
-
 </html>
 
 <script>
@@ -102,7 +101,88 @@
   var qtdRespCorretasUsu = 0;
   var qtdRespErradasUsu = 0;
   var totalRespostasUsu = 0;
+  
+  
+  const filtroGrafico = document.getElementById('tipo_grafico');
 
+  filtroGrafico.addEventListener('change', function () {
+    var grafico = tipo_grafico.value
+    
+    if (grafico == 'ranking') {
+      graficos_aproveitamento.innerHTML = `<div class="chart">
+              <canvas id="myChart"></canvas>
+            </div>`
+      var dias = Number(filtro_dias.value);
+      const ctx = document.getElementById("myChart");
+      if (myChart) {
+        myChart.destroy();
+      }
+      myChart = new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels: listaNomeUsuarioRanking,
+          datasets: [{
+            label: `Aproveitamento nos últimos ${dias} dias`,
+            data: listaAproveitamentoUsuario,
+            borderWidth: 2,
+            borderColor: "#4444ff ",
+            backgroundColor: "#4444ff",
+          }],
+        },
+        option: {
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
+          },
+        },
+      });
+    } else{
+      graficos_aproveitamento.innerHTML = `<div class="chart grafico2">
+    <canvas id="myChart2"></canvas>
+  </div>`
+    
+  const ctx2 = document.getElementById("myChart2");
+      const grafico2 = document.getElementsByClassName("grafico2")
+      
+      if (myChart2) {
+        myChart2.destroy();
+      }
+      if (dias == 1) {
+        // grafico2.style.display = 'none'
+        // ctx2.style.display = 'none'
+      } else{
+        // grafico2.style.display = 'block'
+      var dias = Number(filtro_dias.value);
+
+        myChart2 = new Chart(ctx2, {
+          
+        type: "line",
+        data: {
+          labels: listaDataPorDia,
+          datasets: [
+            {
+              label: `Aproveitamento nos últimos ${dias} dias`,
+              data: listaAproveitamentoPorDia,
+              borderWidth: 2,
+              borderColor: "#ff5927",
+              backgroundColor: "#ff5927",
+            },
+          ],
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
+          },
+        },
+      })
+      };
+    }
+    
+
+  })
   function listarRespostasErradasCorretasPorUsuario(isCorreta) {
     var idUsuario = sessionStorage.ID_USUARIO;
     var dias = Number(filtro_dias.value);
@@ -341,7 +421,8 @@
           },
         },
       });
-      const ctx2 = document.getElementById("myChart2");
+          
+  const ctx2 = document.getElementById("myChart2");
       const grafico2 = document.getElementsByClassName("grafico2")
       
       if (myChart2) {
@@ -352,8 +433,8 @@
         // ctx2.style.display = 'none'
       } else{
         // grafico2.style.display = 'block'
+      var dias = Number(filtro_dias.value);
         myChart2 = new Chart(ctx2, {
-          
         type: "line",
         data: {
           labels: listaDataPorDia,
