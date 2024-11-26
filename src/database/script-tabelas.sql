@@ -8,6 +8,7 @@ CREATE TABLE Usuario (
     ativo char(1) NOT NULL
 );
 
+select * from usuario;
 
 CREATE TABLE Log (
     idLog INT PRIMARY KEY AUTO_INCREMENT,

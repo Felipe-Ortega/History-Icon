@@ -244,7 +244,6 @@
           console.log(json);
           if (isCorreta == "S") {
             console.log(json[0].corretas)
-
             qtdTotalRespCorretas = json[0].corretas;
           } else {
             console.log(json[0].corretas)
@@ -290,7 +289,8 @@
     fetch(`/resposta/listarRankingRespostas/${dias}`, {
       method: "GET"
     })
-      .then((res) => res.json())
+      .then((res) => res.json()
+    )
       .then((json) => {
         listaAproveitamentoUsuario = [];
         listaNomeUsuarioRanking = [];
