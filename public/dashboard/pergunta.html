@@ -23,7 +23,7 @@
 
         <ul>
           <li>
-            <a href="pergunta.html"><button>Pergunta</button></a>
+            <a href="pergunta.html"><button>Perguntas</button></a>
           </li>
           <li>
             <a href="atualizarCadastro.html"><button>Atualizar cadastro</button></a>
@@ -365,8 +365,11 @@
       })
     })
   }
+  function delayResposta(ms) {
+  return new Promise((resposta) => setTimeout(resposta, ms));
+}
   var respostaBancoEnviar = []
-  function enviarResposta() {
+ async function enviarResposta() {
     nextQuest();
     verificaPontuacao();
     var respostaBanco = "";
@@ -402,6 +405,7 @@
         .catch(function (resposta) {
           console.log(`#ERRO: ${resposta}`);
         });
+        await delayResposta(400)
     }
     setTimeout(() => {
       for (var i = 0; i < listaPerguntas.length; i++) {

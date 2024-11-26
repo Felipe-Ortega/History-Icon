@@ -33,7 +33,7 @@
 
         <ul>
           <li>
-            <a href="pergunta.html"><button>Pergunta</button></a>
+            <a href="pergunta.html"><button>Perguntas</button></a>
           </li>
           <li>
             <a href="atualizarCadastro.html"><button>Atualizar cadastro</button></a>
@@ -75,7 +75,7 @@
         </div>
         <div class="ranking kpi">
           <div style="display: flex; align-items: center; height: 100% ; justify-content: space-around; width: 50%;">
-            <h3>Ranking</h3>
+            <h3 id="ranking">Ranking</h3>
             <select id="tipo_grafico">
               <option value="ranking">Ranking</option>
               <option value="desempenho">Desempenho</option>
@@ -112,6 +112,7 @@
       graficos_aproveitamento.innerHTML = `<div class="chart">
               <canvas id="myChart"></canvas>
             </div>`
+      ranking.innerHTML = 'Ranking'
       var dias = Number(filtro_dias.value);
       const ctx = document.getElementById("myChart");
       if (myChart) {
@@ -141,6 +142,7 @@
       graficos_aproveitamento.innerHTML = `<div class="chart grafico2">
     <canvas id="myChart2"></canvas>
   </div>`
+  ranking.innerHTML = 'Desempenho'
     
   const ctx2 = document.getElementById("myChart2");
       const grafico2 = document.getElementsByClassName("grafico2")

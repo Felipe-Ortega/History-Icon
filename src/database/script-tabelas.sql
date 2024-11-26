@@ -68,6 +68,11 @@ SELECT 	idPergunta, opt1, opt2, opt3, opt4, titulo, respostaCorreta FROM Pergunt
 LIMIT 10;
 SELECT COUNT(isCorreta) FROM resposta WHERE isCorreta = 'S';
 
+
+mysqldump -u root -p Luiza0312@ nome_do_banco > banco_exportado.sql;
+mysqldump -u root -p Luiza0312Q HistoryIcon > banco_exportado.sql;
+mysqldump -h 127.0.0.1:3306 -u root -p HistoryIcon > banco_exportado.sql;
+
 SELECT
     nome,
     (
