@@ -195,6 +195,7 @@
       })
     }))
   }
+
   var listaRespostas = [];
   var indiceQuestao = 0;
   var qtdAcertos = 0;
@@ -204,6 +205,7 @@
   const bt3 = document.getElementById(`opt3`);
   const bt4 = document.getElementById(`opt4`);
   var listaBotoes = [bt, bt2, bt3, bt4];
+  // passar os primeiros 
   setTimeout(() => {
     div_titulo_pergunta.innerHTML = listaPerguntas[indiceQuestao].pergunta;
     alternativaA.innerHTML = listaPerguntas[indiceQuestao].alternativaA;
@@ -307,7 +309,7 @@
         bt3.setAttribute("value", listaPerguntas[indiceQuestao].alternativaC);
         bt4.setAttribute("value", listaPerguntas[indiceQuestao].alternativaD);
         selec_erro.innerHTML = ``;
-        //Verifico qual botão foi escolhido
+
       } else {
         selec_erro.innerHTML = `Selecione uma opção`;
       }
@@ -405,7 +407,7 @@
         .catch(function (resposta) {
           console.log(`#ERRO: ${resposta}`);
         });
-        await delayResposta(400)
+        await delayResposta(600)
     }
     setTimeout(() => {
       for (var i = 0; i < listaPerguntas.length; i++) {

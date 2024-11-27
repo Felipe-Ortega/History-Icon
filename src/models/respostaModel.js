@@ -1,4 +1,3 @@
-const { parse } = require("path");
 var database = require("../database/config");
 
 function cadastrar(fkUsuario, fkPergunta, resposta, isCorreta) {
@@ -57,14 +56,19 @@ function listarRespostas(dias) {
   return database.executar(instrucaoSql);
 }
 
+function cadastrarLog(fkUsuario, fkPergunta, fkResposta, dtHr) {
+  var instrucaoSql = `INSERT INTO Log_resposta (fkUsuario, fkPergunta, fkResposta, dtHrResposta) VALUES (${fkUsuario}, ${fkPergunta}, ${fkResposta}, '${dtHr}')`
+  return database.executar(instrucaoSql);
+
+}
+
 function listarRankingRespostas(dias) {
   var instrucaoSql = `
     SELECT
         nome,
-        (
-            CASE
-                WHEN COUNT(isCorreta) = 0 THEN 0
-                ELSE SUM( CASE WHEN isCorreta = 'S' THEN 1 ELSE 0 END) / COUNT(isCorreta)END ) * 100 AS aproveitamento
+(  CASE
+    WHEN COUNT(isCorreta) = 0 THEN 0
+    ELSE SUM( CASE WHEN isCorreta = 'S' THEN 1 ELSE 0 END) / COUNT(isCorreta)END ) * 100 AS aproveitamento
     FROM Resposta
     JOIN Usuario 
         ON Resposta.fkUsuario = Usuario.idUsuario
@@ -79,27 +83,18 @@ function listarRankingRespostas(dias) {
 }
 
 
-function cadastrarLog(fkUsuario, fkPergunta, fkResposta, dtHr) {
-  var instrucaoSql = `INSERT INTO Log_resposta (fkUsuario, fkPergunta, fkResposta, dtHrResposta) VALUES (${fkUsuario}, ${fkPergunta}, ${fkResposta}, '${dtHr}')`
-  return database.executar(instrucaoSql);
 
-}
 
  function listarDesempenhoUsuarioDias(dias, idUsuario){
   var instrucaoSql = `SELECT
     nome,
     dtHrResposta,
-    (
-        CASE
-            WHEN COUNT(isCorreta) = 0 THEN 0
-            ELSE SUM(
-                CASE
-                    WHEN isCorreta = 'S' THEN 1
-                    ELSE 0
-                END
-            ) / COUNT(isCorreta)
-        END
-    ) * 100 AS aproveitamento
+    ( CASE 
+    WHEN COUNT(isCorreta) = 0 THEN 0
+ELSE SUM(
+CASE
+WHEN isCorreta = 'S' THEN 1
+ELSE 0 END ) / COUNT(isCorreta) END ) * 100 AS aproveitamento
 FROM Resposta
 JOIN Usuario 
     ON Resposta.fkUsuario = Usuario.idUsuario
