@@ -283,6 +283,8 @@
   }
   function nextQuest() {
     if (indiceQuestao <= 9) {
+
+     // verifico se algum botão foi pressionado
       var verificacao = false;
       for (let index = 0; index < listaBotoes.length; index++) {
         if (listaBotoes[index].className == "div_button_pressed") {
@@ -290,16 +292,20 @@
           index = listaBotoes.length;
         }
       }
+      //tem um botão pressionado
       if (verificacao == true) {
         if (indiceQuestao < 9) {
           indiceQuestao++;
         }
+        //mudo de questão
         choseQuestion();
+        //adiciono a resposta a lista
         for (let index = 0; index < listaBotoes.length; index++) {
           if (listaBotoes[index].classList == "div_button_pressed") {
             listaRespostas.push(listaBotoes[index].value);
           }
         }
+        //removo a "seleção"
         for (let index = 0; index < listaBotoes.length; index++) {
           listaBotoes[index].classList.remove("div_button_pressed");
           listaBotoes[index].classList.add("none");
@@ -378,6 +384,7 @@
     var fkUsuario = sessionStorage.ID_USUARIO;
     let dataAtual = new Date();
     var dtHora = `${dataAtual.getFullYear()}-${dataAtual.getMonth()+1}-${dataAtual.getDate()}`;
+    selec_erro.innerHTML = `Calculando aproveitamento`
     for (var index = 0; index < listaRespostas.length; index++) {
       var fkPergunta = listaPerguntas[index].id;
       var resposta = listaRespostas[index];

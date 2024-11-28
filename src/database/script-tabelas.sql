@@ -8,7 +8,7 @@ CREATE TABLE Usuario (
     ativo char(1) NOT NULL
 );
 
-select * from usuario;
+select * from Usuario;
 
 CREATE TABLE Log (
     idLog INT PRIMARY KEY AUTO_INCREMENT,
@@ -75,14 +75,7 @@ mysqldump -h 127.0.0.1:3306 -u root -p HistoryIcon > banco_exportado.sql;
 
 SELECT
     nome,
-    (
-        SUM(
-            CASE
-                WHEN isCorreta = 'S' THEN 1
-                ELSE 0
-            END
-        ) / COUNT(isCorreta)
-    ) * 100 AS aproveitamento
+    ( SUM( CASE WHEN isCorreta = 'S' THEN 1 ELSE 0 END ) / COUNT(isCorreta) ) * 100 AS aproveitamento
 FROM Resposta JOIN Usuario 
     ON Resposta.fkUsuario = Usuario.idUsuario
     JOIN Log_resposta

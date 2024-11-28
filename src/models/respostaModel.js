@@ -68,7 +68,7 @@ function listarRankingRespostas(dias) {
         nome,
 (  CASE
     WHEN COUNT(isCorreta) = 0 THEN 0
-    ELSE SUM( CASE WHEN isCorreta = 'S' THEN 1 ELSE 0 END) / COUNT(isCorreta)END ) * 100 AS aproveitamento
+    ELSE SUM( CASE WHEN isCorreta = 'S' THEN 1 ELSE 0 END) / COUNT(isCorreta) END ) * 100 AS aproveitamento
     FROM Resposta
     JOIN Usuario 
         ON Resposta.fkUsuario = Usuario.idUsuario

@@ -64,12 +64,12 @@
             <h2 id="perguntas_usuario"></h2>
           </div>
           <div class="kpi">
-              <h2>Você está</h2>
-              <h2 id="acima_usuario"></h2>
-              <h2 id="desempenho_usuario_vs_global"></h2>
+            <h2>Você está</h2>
+            <h2 id="acima_usuario"></h2>
+            <h2 id="desempenho_usuario_vs_global"></h2>
           </div>
           <div class="kpi">
-            <h2>Acertos global</h2> 
+            <h2>Acertos global</h2>
             <h2 id="acerto_global"></h2>
           </div>
         </div>
@@ -84,12 +84,13 @@
           <div class="graficos_aproveitamento" id="graficos_aproveitamento">
             <div class="chart">
               <canvas id="myChart"></canvas>
-            </div>            
+            </div>
           </div>
         </div>
+      </div>
     </div>
-  </div>
 </body>
+
 </html>
 
 <script>
@@ -101,13 +102,13 @@
   var qtdRespCorretasUsu = 0;
   var qtdRespErradasUsu = 0;
   var totalRespostasUsu = 0;
-  
-  
+
+
   const filtroGrafico = document.getElementById('tipo_grafico');
 
   filtroGrafico.addEventListener('change', function () {
     var grafico = tipo_grafico.value
-    
+
     if (grafico == 'ranking') {
       graficos_aproveitamento.innerHTML = `<div class="chart">
               <canvas id="myChart"></canvas>
@@ -138,51 +139,51 @@
           },
         },
       });
-    } else{
+    } else {
       graficos_aproveitamento.innerHTML = `<div class="chart grafico2">
     <canvas id="myChart2"></canvas>
   </div>`
-  ranking.innerHTML = 'Desempenho'
-    
-  const ctx2 = document.getElementById("myChart2");
+      ranking.innerHTML = 'Desempenho'
+
+      const ctx2 = document.getElementById("myChart2");
       const grafico2 = document.getElementsByClassName("grafico2")
-      
+
       if (myChart2) {
         myChart2.destroy();
       }
       if (dias == 1) {
         // grafico2.style.display = 'none'
         // ctx2.style.display = 'none'
-      } else{
+      } else {
         // grafico2.style.display = 'block'
-      var dias = Number(filtro_dias.value);
+        var dias = Number(filtro_dias.value);
 
         myChart2 = new Chart(ctx2, {
-          
-        type: "line",
-        data: {
-          labels: listaDataPorDia,
-          datasets: [
-            {
-              label: `Aproveitamento nos últimos ${dias} dias`,
-              data: listaAproveitamentoPorDia,
-              borderWidth: 2,
-              borderColor: "#ff5927",
-              backgroundColor: "#ff5927",
-            },
-          ],
-        },
-        options: {
-          scales: {
-            y: {
-              beginAtZero: true,
+
+          type: "line",
+          data: {
+            labels: listaDataPorDia,
+            datasets: [
+              {
+                label: `Aproveitamento nos últimos ${dias} dias`,
+                data: listaAproveitamentoPorDia,
+                borderWidth: 2,
+                borderColor: "#ff5927",
+                backgroundColor: "#ff5927",
+              },
+            ],
+          },
+          options: {
+            scales: {
+              y: {
+                beginAtZero: true,
+              },
             },
           },
-        },
-      })
+        })
       };
     }
-    
+
 
   })
   function listarRespostasErradasCorretasPorUsuario(isCorreta) {
@@ -292,7 +293,7 @@
       method: "GET"
     })
       .then((res) => res.json()
-    )
+      )
       .then((json) => {
         listaAproveitamentoUsuario = [];
         listaNomeUsuarioRanking = [];
@@ -324,7 +325,7 @@
       console.log(json[0])
       for (var index = 0; index < json.length; index++) {
         listaAproveitamentoPorDia.push(json[index].aproveitamento)
-        listaDataPorDia.push(json[index].dtHrResposta.slice(0,10))
+        listaDataPorDia.push(json[index].dtHrResposta.slice(0, 10))
 
       }
     }).catch((err) => {
@@ -358,17 +359,12 @@
   }
   let myChart;
   function verificarDesempenhoUsuarioVsGlobal() {
-    var menor = 0;
-    if (porcentagemAcertosTotal < porcentagemAcertos) {
-      menor = porcentagemAcertosTotal
-    } else if (porcentagemAcertos > porcentagemAcertosTotal) {
-      menor = porcentagemAcertos
+    var menor = Math.min(porcentagemAcertosTotal, porcentagemAcertos);
+
+    if (menor === 0) {
+      desempenho_usuario = 0; 
     } else {
-      menor = porcentagemAcertos
-    }
-    var desempenho_usuario = (((porcentagemAcertos - porcentagemAcertosTotal) / menor) * 100)
-    if (menor == 0) {
-      desempenho_usuario = 0
+      desempenho_usuario = (((porcentagemAcertos - porcentagemAcertosTotal) / menor) * 100);
     }
     if (isNaN(desempenho_usuario)) {
       desempenho_usuario = 0
@@ -423,41 +419,41 @@
           },
         },
       });
-          
-  const ctx2 = document.getElementById("myChart2");
+
+      const ctx2 = document.getElementById("myChart2");
       const grafico2 = document.getElementsByClassName("grafico2")
-      
+
       if (myChart2) {
         myChart2.destroy();
       }
       if (dias == 1) {
         // grafico2.style.display = 'none'
         // ctx2.style.display = 'none'
-      } else{
+      } else {
         // grafico2.style.display = 'block'
-      var dias = Number(filtro_dias.value);
+        var dias = Number(filtro_dias.value);
         myChart2 = new Chart(ctx2, {
-        type: "line",
-        data: {
-          labels: listaDataPorDia,
-          datasets: [
-            {
-              label: `Aproveitamento nos últimos ${dias} dias`,
-              data: listaAproveitamentoPorDia,
-              borderWidth: 2,
-              borderColor: "#ff5927",
-              backgroundColor: "#ff5927",
-            },
-          ],
-        },
-        options: {
-          scales: {
-            y: {
-              beginAtZero: true,
+          type: "line",
+          data: {
+            labels: listaDataPorDia,
+            datasets: [
+              {
+                label: `Aproveitamento nos últimos ${dias} dias`,
+                data: listaAproveitamentoPorDia,
+                borderWidth: 2,
+                borderColor: "#ff5927",
+                backgroundColor: "#ff5927",
+              },
+            ],
+          },
+          options: {
+            scales: {
+              y: {
+                beginAtZero: true,
+              },
             },
           },
-        },
-      })
+        })
       };
     }, 400);
   }
