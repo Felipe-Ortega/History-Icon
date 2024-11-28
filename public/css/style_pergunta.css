@@ -42,6 +42,9 @@ a {
 .container_menu li {
   width: 100%;
 }
+#btn_refazer{
+  width: 20%;
+}
 .btn_sair {
   border-bottom-right-radius: 20px;
   background-color: #494949;
@@ -191,6 +194,7 @@ a {
   padding-inline: 4vw;
   padding-top: 1vh;
   padding-bottom: 1vh;
+  font-size: 20px;
   width: 35%;
 }
 .resultado{

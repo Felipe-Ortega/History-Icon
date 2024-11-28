@@ -176,13 +176,11 @@
     },
   ];
 
-  var validaSelect = false;
   function listarAleatorio() {
     fetch("/pergunta/listarAleatorio", {
       method: "GET",
     }).then((res => {
       res.json().then((json) => {
-        console.log(json)
         for (var i = 0; i < json.length; i++) {
           listaPerguntas[i].id = json[i].idPergunta,
             listaPerguntas[i].pergunta = json[i].titulo,
@@ -373,9 +371,11 @@
       })
     })
   }
-  function delayResposta(ms) {
+
+function delayResposta(ms) {
   return new Promise((resposta) => setTimeout(resposta, ms));
 }
+
   var respostaBancoEnviar = []
  async function enviarResposta() {
     nextQuest();
@@ -384,7 +384,9 @@
     var fkUsuario = sessionStorage.ID_USUARIO;
     let dataAtual = new Date();
     var dtHora = `${dataAtual.getFullYear()}-${dataAtual.getMonth()+1}-${dataAtual.getDate()}`;
-    selec_erro.innerHTML = `Calculando aproveitamento`
+    var spanAviso = document.getElementById("selec_erro")
+    spanAviso.style.fontSize = `20px`
+    spanAviso.innerHTML = `Calculando aproveitamento`
     for (var index = 0; index < listaRespostas.length; index++) {
       var fkPergunta = listaPerguntas[index].id;
       var resposta = listaRespostas[index];
@@ -465,8 +467,10 @@
     }
     section_quest.innerHTML = `<span><h2>Sua pontuação</h2>
       <h3>Você acertou: ${qtdAcertos}/10</h2></span><br><div class="resultado">${mensagem}<br>
-        <button class="NextBackButton" id="btn_back" onclick="refazer()">Refazer</button>
+        <button class="NextBackButton" id="btn_refazer" onclick="refazer()">Refazer</button>
         </div>
     `;
+    var botaoRefazer = document.getElementById("btn_refazer")
+    botaoRefazer.style.width = `20%`
   }
 </script>

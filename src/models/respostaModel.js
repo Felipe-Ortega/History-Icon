@@ -78,14 +78,13 @@ function listarRankingRespostas(dias) {
     GROUP BY nome
     ORDER BY aproveitamento DESC;
   `;
-
   return database.executar(instrucaoSql);
 }
 
 
 
 
- function listarDesempenhoUsuarioDias(dias, idUsuario){
+function listarDesempenhoUsuarioDias(dias, idUsuario) {
   var instrucaoSql = `SELECT
     nome,
     dtHrResposta,
@@ -103,9 +102,9 @@ JOIN Log_resposta
 WHERE dtHrResposta >= NOW() - INTERVAL ${parseInt(dias, 10)} DAY AND idUsuario = ${parseInt(idUsuario, 10)}
 GROUP BY nome, dtHrResposta
 ORDER BY aproveitamento DESC;`;
-return database.executar(instrucaoSql);
+  return database.executar(instrucaoSql);
 
- }
+}
 module.exports = {
   cadastrarLog,
   cadastrar,
